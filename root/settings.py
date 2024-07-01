@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps',
     'colorfield',
+    'django_ckeditor_5',
 ]
 
 MIDDLEWARE = [

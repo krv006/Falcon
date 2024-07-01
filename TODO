@@ -78,3 +78,41 @@
                         </div>
                     </div>
                 </div>
+
+
+PAGINATION
+
+{% if page_obj.has_previous %}
+                <a class="btn btn-falcon-default btn-sm me-2" href="?page={{ page_obj.previous_page_number }}"
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Prev">
+                    <span class="fas fa-chevron-left"></span>
+                </a>
+            {% else %}
+                <button class="btn btn-falcon-default btn-sm me-2" type="button" disabled="disabled"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Prev">
+                    <span class="fas fa-chevron-left"></span>
+                </button>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == 1 or num == page_obj.paginator.num_pages or num == page_obj.number %}
+                    <a class="btn btn-sm btn-falcon-default {% if page_obj.number == num %}text-primary{% endif %} me-2"
+                       href="?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+                    <a class="btn btn-sm btn-falcon-default me-2" href="?page={{ num }}">{{ num }}</a>
+                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                    <span class="btn btn-sm btn-falcon-default me-2 fas fa-ellipsis-h"></span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-falcon-default btn-sm me-2" href="?page={{ page_obj.next_page_number }}"
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="Next">
+                    <span class="fas fa-chevron-right"></span>
+                </a>
+            {% else %}
+                <button class="btn btn-falcon-default btn-sm me-2" type="button" disabled="disabled"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="Next">
+                    <span class="fas fa-chevron-right"></span>
+                </button>
+            {% endif %}

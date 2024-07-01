@@ -19,15 +19,15 @@
                             <form class="row gx-2">
                                 <div class="col-auto"><small>Sort by: </small></div>
                                 <div class="col-auto">
-                                    
-                                    
+
+
                                     <select class="form-select form-select-sm" aria-label="Bulk actions">
                                         <option selected="">Best Match</option>
                                         <option value="Refund">Newest</option>
                                         <option value="Delete">Price</option>
                                     </select>
-                                
-                                    
+
+
                                 </div>
                             </form>
                         </div>
@@ -94,11 +94,10 @@
                                     <div class="col-lg-4 d-flex justify-content-between flex-column">
                                         <div>
                                             <h4 class="fs-1 fs-md-2 text-warning mb-0">${{ product.price }}</h4>
-                                        
-                                            {% if product.discount %}
+                                            {% if product.price_percentage %}
                                                 <h5 class="fs--1 text-500 mb-0 mt-1">
                                                     <del>${{ product.price }}</del>
-                                                    <span class="ms-1">-{{ product.discount }}%</span>
+                                                    <span class="ms-1">-{{ product.price_percentage }}%</span>
                                                 </h5>
                                             {% endif %}
 

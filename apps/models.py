@@ -30,6 +30,7 @@ class Product(Model):
     shopping_cost = models.DecimalField(max_digits=7, decimal_places=2)
     quantity = models.PositiveIntegerField()
     description = JSONField()
+    description_short = CKEditor5Field()
     short_description = models.TextField(null=True, blank=True)
     long_description = models.TextField(null=True, blank=True)
     category = models.ForeignKey('apps.Category', models.CASCADE)

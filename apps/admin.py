@@ -1,5 +1,6 @@
 from django.contrib import admin
 from apps.models import ImageProduct, Product, Category, Tag, Review
+from mptt.admin import MPTTModelAdmin
 
 
 class ImageProductStackedInline(admin.StackedInline):
@@ -10,7 +11,7 @@ class ImageProductStackedInline(admin.StackedInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(MPTTModelAdmin):
     pass
 
 

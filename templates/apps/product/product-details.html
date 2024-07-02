@@ -1,3 +1,5 @@
+
+
 {% extends 'apps/base.html' %}
 {% load static %}
 {% block main_content %}
@@ -32,7 +34,9 @@
                             class="fa fa-star-half-alt text-warning star-icon"></span><span
                             class="ms-1 text-600">(8)</span>
                     </div>
-                    <p class="fs--1">{{ product.short_description }}</p>
+                    <p class="fs--1">
+                        {{ product.short_description }}
+                    </p>
                     <h4 class="d-flex align-items-center"><span
                             class="text-warning me-2">${{ product.new_price }}</span><span
                             class="me-1 fs--1 text-500">
@@ -119,23 +123,24 @@
                             <div class="tab-pane fade" id="tab-reviews" role="tabpanel"
                                  aria-labelledby="reviews-tab">
                                 <div class="row mt-3">
-                                    
+
                                     {% for reviews in product.reviw.all %}
-                                    <div class="col-lg-6 mb-4 mb-lg-0">
-                                        <div class="mb-1"><span
-                                                class="fa fa-star text-warning fs--1"></span><span
-                                                class="fa fa-star text-warning fs--1"></span><span
-                                                class="fa fa-star text-warning fs--1"></span><span
-                                                class="fa fa-star text-warning fs--1"></span><span
-                                                class="fa fa-star text-warning fs--1"></span><span
-                                                class="ms-3 text-dark fw-semi-bold">Awesome support, great code 😍</span>
+                                        <div class="col-lg-6 mb-4 mb-lg-0">
+                                            <div class="mb-1"><span
+                                                    class="fa fa-star text-warning fs--1"></span><span
+                                                    class="fa fa-star text-warning fs--1"></span><span
+                                                    class="fa fa-star text-warning fs--1"></span><span
+                                                    class="fa fa-star text-warning fs--1"></span><span
+                                                    class="fa fa-star text-warning fs--1"></span><span
+                                                    class="ms-3 text-dark fw-semi-bold">Awesome support, great code 😍</span>
+                                            </div>
+                                            <p class="fs--1 mb-2 text-600">By {{ reviews.name }}
+                                                • {{ reviews.created_at }}</p>
+                                            <p class="mb-0">{{ reviews.description }}</p>
+                                            <hr class="my-4"/>
                                         </div>
-                                        <p class="fs--1 mb-2 text-600">By {{ reviews.name }} • {{ reviews.created_at }}</p>
-                                        <p class="mb-0">{{ reviews.description }}</p>
-                                        <hr class="my-4"/>
-                                    </div>
                                     {% endfor %}
-                                    
+
                                     <div class="col-lg-6 ps-lg-5">
                                         <form>
                                             <h5 class="mb-3">Write your Review</h5>

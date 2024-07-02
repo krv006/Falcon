@@ -2,11 +2,13 @@ from django.db import models
 from django.db.models import Model, JSONField
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
+from mptt.models import MPTTModel, TreeForeignKey
 
 
-class Category(Model):
+class Category(MPTTModel):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, editable=False)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.slug:
@@ -30,9 +32,8 @@ class Product(Model):
     shopping_cost = models.DecimalField(max_digits=7, decimal_places=2)
     quantity = models.PositiveIntegerField()
     description = JSONField()
-    description_short = CKEditor5Field()
-    short_description = models.TextField(null=True, blank=True)
-    long_description = models.TextField(null=True, blank=True)
+    short_description = CKEditor5Field()
+    long_description = CKEditor5Field()
     category = models.ForeignKey('apps.Category', models.CASCADE)
     tags = models.ManyToManyField('apps.Tag', related_name='tag')
     update_at = models.DateTimeField(auto_now=True)

@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'apps',
     'colorfield',
     'django_ckeditor_5',
+    'mppt',
 ]
 
 MIDDLEWARE = [

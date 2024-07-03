@@ -1,7 +1,6 @@
-
-
 {% extends 'apps/base.html' %}
 {% load static %}
+
 {% block main_content %}
     <div class="card mb-3">
         <div class="card-body">
@@ -132,7 +131,7 @@
                                                     class="fa fa-star text-warning fs--1"></span><span
                                                     class="fa fa-star text-warning fs--1"></span><span
                                                     class="fa fa-star text-warning fs--1"></span><span
-                                                    class="ms-3 text-dark fw-semi-bold">Awesome support, great code 😍</span>
+                                                    class="ms-3 text-dark fw-semi-bold">{{ reviews.comment_status }}</span>
                                             </div>
                                             <p class="fs--1 mb-2 text-600">By {{ reviews.name }}
                                                 • {{ reviews.created_at }}</p>

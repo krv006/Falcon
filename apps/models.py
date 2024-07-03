@@ -6,7 +6,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Category(MPTTModel):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True, editable=False)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
@@ -20,6 +20,9 @@ class Category(MPTTModel):
                 num += 1
             self.slug = unique
         super().save(force_insert, force_update, using, update_fields)
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
 
     def __str__(self):
         return self.name
@@ -59,6 +62,7 @@ class Review(Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, null=True, blank=True)
     description = models.TextField()
+    comment_status = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey('apps.Product', models.CASCADE, related_name='reviw')
 

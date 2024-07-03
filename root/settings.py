@@ -25,10 +25,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mppt',
     'apps',
     'colorfield',
     'django_ckeditor_5',
-    'mppt',
+
 ]
 
 MIDDLEWARE = [

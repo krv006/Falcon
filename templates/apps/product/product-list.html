@@ -11,7 +11,9 @@
         <div class="card-body">
             <div class="row flex-between-center">
                 <div class="col-sm-auto mb-2 mb-sm-0">
-                    <h6 class="mb-0">Showing 1-24 of 205 Products</h6>
+                    <h6 class="mb-0">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }}
+                        of {{ page_obj.paginator.count }} Products
+                    </h6>
                 </div>
                 <div class="col-sm-auto">
                     <div class="row gx-2 align-items-center">
@@ -84,7 +86,7 @@
                                                         <li>
                                                             <span class="fas fa-circle"
                                                                   data-fa-transform="shrink-12"></span>
-                                                            <span>{{ value }} {{ key }}</span>
+                                                            <span>{{ value }}</span>
                                                         </li>
                                                     {% endif %}
                                                 {% endfor %}

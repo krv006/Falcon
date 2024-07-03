@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 
@@ -110,14 +109,17 @@
                             </div>
 
                             {% for category in categories %}
-                                <a class="nav-link" href="{% url 'product_list' %}?category={{ category.slug }}" role="button"
+                                <a class="nav-link" href="{% url 'product_list' category.slug %}" role="button"
                                    aria-expanded="false">
-                                    <div class="d-flex align-items-center"><span class="nav-link-icon">
-                                        <span class="fas fa-calendar-alt"></span></span>
+                                    <div class="d-flex align-items-center">
+            <span class="nav-link-icon">
+                <span class="fas fa-calendar-alt"></span>
+            </span>
                                         <span class="nav-link-text ps-1">{{ category.name }}</span>
                                     </div>
                                 </a>
                             {% endfor %}
+
 
                         </li>
                     </ul>

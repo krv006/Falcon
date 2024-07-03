@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <h5>{{ product.title }}</h5><a class="fs--1 mb-2 d-block" href="#!">{{ product.category }}</a>
+                    <h5>{{ product.title }}</h5><a class="fs--1 mb-2 d-block" href="#!">{{ product.category.name }}</a>
                     <div class="fs--2 mb-3 d-inline-block text-decoration-none"><span
                             class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span
                             class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span
@@ -34,7 +34,7 @@
                             class="ms-1 text-600">(8)</span>
                     </div>
                     <p class="fs--1">
-                        {{ product.short_description }}
+                        {{ product.short_description|safe }}
                     </p>
                     <h4 class="d-flex align-items-center"><span
                             class="text-warning me-2">${{ product.new_price }}</span><span
@@ -102,7 +102,7 @@
                             <div class="tab-pane fade show active" id="tab-description" role="tabpanel"
                                  aria-labelledby="description-tab">
                                 <div class="mt-3">
-                                    <p>{{ product.long_description }}</p>
+                                    <p>{{ product.long_description|safe }}</p>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="tab-specifications" role="tabpanel"

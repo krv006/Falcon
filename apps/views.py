@@ -23,6 +23,9 @@ class ProductListTemplateView(ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        category_slug = self.request.GET.get('category')
+        if category_slug:
+            qs = qs.filter(category__slug=category_slug)
         if ordering := self.request.GET.get('ordering'):
             qs = qs.order_by(ordering)
         search = self.request.GET.get('search')
@@ -40,3 +43,8 @@ class ProductDetailTemplateView(DetailView):
     model = Product
     template_name = 'apps/product/product-details.html'
     context_object_name = 'product'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['categories'] = Category.objects.all()
+        return context

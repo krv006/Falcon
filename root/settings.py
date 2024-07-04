@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'apps',
     'colorfield',
     'django_ckeditor_5',
-
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -127,6 +127,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+from import_export.formats.base_formats import CSV, XLSX
+
+IMPORT_FORMATS = [CSV, XLSX]
+
 # python manage.py collectstatic
 # color run qilish
 
@@ -218,3 +223,16 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+# LOGGING = {
+#     "handlers": {
+#         "console": {"level": "DEBUG", "class": "logging.StreamHandler"},
+#     },
+#     "loggers": {
+#         "django.db.backends": {"level": "INFO", "handlers": ["console"]},
+#         "import_export": {
+#             "handlers": ["console"],
+#             "level": "INFO",
+#         },
+#     },
+# }

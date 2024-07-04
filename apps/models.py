@@ -3,6 +3,9 @@ from django.db.models import Model, JSONField
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
+from django.utils.timezone import now
+
+from datetime import timedelta
 
 
 class Category(MPTTModel):
@@ -39,7 +42,8 @@ class Product(Model):
     long_description = CKEditor5Field()
     category = models.ForeignKey('apps.Category', models.CASCADE)
     tags = models.ManyToManyField('apps.Tag', related_name='tag')
-    update_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
@@ -47,6 +51,10 @@ class Product(Model):
     @property
     def new_price(self):
         return self.price * (100 - self.price_percentage) // 100
+
+    @property
+    def is_new(self) -> bool:
+        return self.created_at >= now() - timedelta(days=7)
 
 
 class ImageProduct(Model):

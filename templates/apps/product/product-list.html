@@ -1,4 +1,4 @@
-{% extends 'apps/base.html' %}
+{% extends 'apps/main_base.html' %}
 {% load static %}
 
 {% block title %}
@@ -66,9 +66,15 @@
                                             <div class="swiper-button-prev swiper-button-white"></div>
                                         </div>
                                     </div>
-                                    <div class="badge rounded-pill bg-success position-absolute top-0 end-0 me-2 mt-2 fs--2 z-index-2">
-                                        New
-                                    </div>
+                                    {% if product.is_new %}
+                                        <div class="badge rounded-pill bg-success position-absolute top-0 end-0 me-2 mt-2 fs--2 z-index-2">
+                                            New
+                                        </div>
+                                    {% else %}
+                                        <div class="badge rounded-pill bg-secondary position-absolute top-0 end-0 me-2 mt-2 fs--2 z-index-2">
+                                            Old
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-sm-7 col-md-8">

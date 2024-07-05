@@ -1,118 +1,68 @@
-                <div class="col-12 p-card bg-100">
-                    <div class="row">
-                        <div class="col-sm-5 col-md-4">
-                            <div class="position-relative h-sm-100">
-                                <div class="swiper-container theme-slider h-100"
-                                     data-swiper='{"autoplay":true,"autoHeight":true,"spaceBetween":5,"loop":true,"loopedSlides":5,"navigation":{"nextEl":".swiper-button-next","prevEl":".swiper-button-prev"}}'>
-                                    <div class="swiper-wrapper h-100">
-                                        <div class="swiper-slide h-100"><a class="d-block h-sm-100"
-                                                                           href="../../../app/e-commerce/product/product-details.html"><img
-                                                class="rounded-1 h-100 w-100 fit-cover"
-                                                src="{% static 'apps/assets/img/products/1.jpg' %}" alt=""/></a></div>
-                                        <div class="swiper-slide h-100"><a class="d-block h-sm-100"
-                                                                           href="../../../app/e-commerce/product/product-details.html"><img
-                                                class="rounded-1 h-100 w-100 fit-cover"
-                                                src="{% static 'apps/assets/img/products/1-2.jpg' %}" alt=""/></a></div>
-                                        <div class="swiper-slide h-100"><a class="d-block h-sm-100"
-                                                                           href="../../../app/e-commerce/product/product-details.html"><img
-                                                class="rounded-1 h-100 w-100 fit-cover"
-                                                src="{% static 'apps/assets/img/products/1-3.jpg' %}" alt=""/></a></div>
-                                    </div>
-                                    <div class="swiper-nav">
-                                        <div class="swiper-button-next swiper-button-white"></div>
-                                        <div class="swiper-button-prev swiper-button-white"></div>
-                                    </div>
-                                </div>
-                                <div class="badge rounded-pill bg-success position-absolute top-0 end-0 me-2 mt-2 fs--2 z-index-2">
-                                    New
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-7 col-md-8">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <h5 class="mt-3 mt-sm-0"><a class="text-dark fs-0 fs-lg-1"
-                                                                href="../../../app/e-commerce/product/product-details.html">Apple
-                                        MacBook Pro (15&quot; Retina, Touch Bar, 2.2GHz 6-Core Intel Core i7, 16GB RAM,
-                                        256GB SSD) - Space Gray (Latest Model)</a></h5>
-                                    <p class="fs--1 mb-2 mb-md-3"><a class="text-500" href="#!">Computer &amp;
-                                        Accessories</a></p>
-                                    <ul class="list-unstyled d-none d-lg-block">
-                                        <li><span class="fas fa-circle" data-fa-transform="shrink-12"></span><span>16GB RAM</span>
-                                        </li>
-                                        <li><span class="fas fa-circle" data-fa-transform="shrink-12"></span><span>256GB SSD Hard Drive</span>
-                                        </li>
-                                        <li><span class="fas fa-circle" data-fa-transform="shrink-12"></span><span>Intel Core i7</span>
-                                        </li>
-                                        <li><span class="fas fa-circle" data-fa-transform="shrink-12"></span><span>Mac OS</span>
-                                        </li>
-                                        <li><span class="fas fa-circle" data-fa-transform="shrink-12"></span><span>Space Gray</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-4 d-flex justify-content-between flex-column">
-                                    <div>
-                                        <h4 class="fs-1 fs-md-2 text-warning mb-0">$7199</h4>
-                                        <div class="mb-2 mt-3"><span class="fa fa-star text-warning"></span><span
-                                                class="fa fa-star text-warning"></span><span
-                                                class="fa fa-star text-warning"></span><span
-                                                class="fa fa-star text-warning"></span><span
-                                                class="fa fa-star-half-alt text-warning star-icon"></span><span
-                                                class="ms-1">(20)</span>
-                                        </div>
-                                        <div class="d-none d-lg-block">
-                                            <p class="fs--1 mb-1">Shipping Cost: <strong>$65</strong></p>
-                                            <p class="fs--1 mb-1">Stock: <strong class="text-danger">Sold-Out</strong>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2"><a
-                                            class="btn btn-sm btn-outline-secondary border-300 d-lg-block me-2 me-lg-0"
-                                            href="#!"><span class="far fa-heart"></span><span
-                                            class="ms-2 d-none d-md-inline-block">Favourite</span></a><a
-                                            class="btn btn-sm btn-primary d-lg-block mt-lg-2" href="#!"><span
-                                            class="fas fa-cart-plus"> </span><span
-                                            class="ms-2 d-none d-md-inline-block">Add to Cart</span></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+admin
+model fields
+class model meta
 
 
-PAGINATION
+#HOMEWORK
+https://bootdey.com/snippets/view/Shop-page
+1. category boyicha productlarni chiqarish
+2. pagination ishlidigan qilish
+3. price(low, high), newest boyicha order qilish
+4. product title va description boyicha search qilish
+5. product ni CRUD
+6. mptt ishlatgan holda, category ni ichma-ich qilish
+7. adminkada product qoshishda categoryni (bollari bolmagan category) ni tanlashi kk
+8. adminkada category qoshishda parent category ga producti bolmaganlar categoryni tanlash mn
 
-{% if page_obj.has_previous %}
-                <a class="btn btn-falcon-default btn-sm me-2" href="?page={{ page_obj.previous_page_number }}"
-                   data-bs-toggle="tooltip" data-bs-placement="top" title="Prev">
-                    <span class="fas fa-chevron-left"></span>
-                </a>
-            {% else %}
-                <button class="btn btn-falcon-default btn-sm me-2" type="button" disabled="disabled"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Prev">
-                    <span class="fas fa-chevron-left"></span>
-                </button>
-            {% endif %}
 
-            {% for num in page_obj.paginator.page_range %}
-                {% if num == 1 or num == page_obj.paginator.num_pages or num == page_obj.number %}
-                    <a class="btn btn-sm btn-falcon-default {% if page_obj.number == num %}text-primary{% endif %} me-2"
-                       href="?page={{ num }}">{{ num }}</a>
-                {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
-                    <a class="btn btn-sm btn-falcon-default me-2" href="?page={{ num }}">{{ num }}</a>
-                {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
-                    <span class="btn btn-sm btn-falcon-default me-2 fas fa-ellipsis-h"></span>
-                {% endif %}
-            {% endfor %}
 
-            {% if page_obj.has_next %}
-                <a class="btn btn-falcon-default btn-sm me-2" href="?page={{ page_obj.next_page_number }}"
-                   data-bs-toggle="tooltip" data-bs-placement="top" title="Next">
-                    <span class="fas fa-chevron-right"></span>
-                </a>
-            {% else %}
-                <button class="btn btn-falcon-default btn-sm me-2" type="button" disabled="disabled"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="Next">
-                    <span class="fas fa-chevron-right"></span>
-                </button>
-            {% endif %}
+https://ccbv.co.uk/
+
+class based view
+CRUD
+
+
+
+mptt, ckeditor, import-export, jazzmin
+class based view
+
+
+https://books.agiliq.com/projects/django-admin-cookbook/en/latest/
+model field types
+model field options
+class model meta options
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#HOMEWORK
+1. mptt(category), ckeditor(product description), import-export(product, category)
+2. product list page dagi (Showing 1-24 of 205 Products) shuni togri chiqadigan qilish kerak
+3. New nomli badge ni togri ishlidigan qilish
+4. product list page dagi productni categorysini bosgandan category ga tegishli productlarni chiqarish kk
+5. chap menyuda (cateogry lar listini chiqarishda), 2ta etapli qilish
+6. product detailda barcha narsalarni chiqarish kk
+
+
+
+
+login,register,celery,email,updateview,createview, loginview, logoutview
+
+
+#HOMEWORK
+1. user login qilmagan bolsa default image korsatish
+2.
+
+
+10.10.2.174

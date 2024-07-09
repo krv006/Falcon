@@ -1,4 +1,4 @@
-{% extends 'apps/main_base.html' %}
+{% extends 'apps/product/base.html' %}
 {% load static %}
 
 {% block title %}
@@ -80,19 +80,28 @@
                             <div class="col-sm-7 col-md-8">
                                 <div class="row">
                                     <div class="col-lg-8">
-                                        <h5 class="mt-3 mt-sm-0"><a class="text-dark fs-0 fs-lg-1"
-                                                                    href="{% url 'product_detail' product.pk %}">{{ product.title }}</a>
+                                        <h5 class="mt-3 mt-sm-0">
+                                            <a class="text-dark fs-0 fs-lg-1"
+                                               href="{% url 'product_detail' product.pk %}">
+                                                {{ product.title }}
+                                            </a>
                                         </h5>
-                                        <p class="fs--1 mb-2 mb-md-3"><a class="text-500" href="#!">
-                                            {{ product.category.name }}</a></p>
+                                        <p class="fs--1 mb-2 mb-md-3">
+                                            <a class="text-500" href="#!">
+                                                {{ product.category.name }}
+                                            </a>
+                                        </p>
                                         <ul class="list-unstyled d-none d-lg-block">
                                             {% if product.description.items %}
                                                 {% for key, value in product.description.items %}
                                                     {% if forloop.counter <= 5 %}
                                                         <li>
                                                             <span class="fas fa-circle"
-                                                                  data-fa-transform="shrink-12"></span>
-                                                            <span>{{ value }}</span>
+                                                                  data-fa-transform="shrink-12">
+                                                            </span>
+                                                            <span>
+                                                                {{ value }}
+                                                            </span>
                                                         </li>
                                                     {% endif %}
                                                 {% endfor %}

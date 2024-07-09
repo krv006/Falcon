@@ -1,7 +1,8 @@
-{% extends 'apps/main_base.html' %}
+{% extends 'apps/product/base.html' %}
+
 {% load static %}
 
-{% block content %}
+{% block main_content %}
     <div class="card mb-3">
         <div class="card-body">
             <div class="row">
@@ -11,10 +12,13 @@
                              data-swiper='{"autoHeight":true,"spaceBetween":5,"loop":true,"loopedSlides":5,"thumb":{"spaceBetween":5,"slidesPerView":5,"loop":true,"freeMode":true,"grabCursor":true,"loopedSlides":5,"centeredSlides":true,"slideToClickedSlide":true,"watchSlidesVisibility":true,"watchSlidesProgress":true,"parent":"#galleryTop"},"slideToClickedSlide":true}'>
                             <div class="swiper-wrapper h-100">
                                 {% for p_image in product.images.all %}
-                                    <div class="swiper-slide h-100"><a class="d-block h-sm-100"
-                                                                       href="{% url 'product_detail' product.pk %}"><img
-                                            class="rounded-1 h-100 w-100 fit-cover"
-                                            src="{{ p_image.image.url }}" alt=""/></a>
+                                    <div class="swiper-slide h-100">
+                                        <a class="d-block h-sm-100"
+                                           href="{% url 'product_detail' product.pk %}">
+                                            <img
+                                                    class="rounded-1 h-100 w-100 fit-cover"
+                                                    src="{{ p_image.image.url }}" alt=""/>
+                                        </a>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -26,7 +30,10 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <h5>{{ product.title }}</h5><a class="fs--1 mb-2 d-block" href="#!">{{ product.category.name }}</a>
+                    <h5>{{ product.title }}</h5>
+                    <a class="fs--1 mb-2 d-block" href="#!">
+                        {{ product.category.name }}
+                    </a>
                     <div class="fs--2 mb-3 d-inline-block text-decoration-none"><span
                             class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span
                             class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span
@@ -53,7 +60,7 @@
 
                     <p class="fs--1 mb-3">Tags:
                         {% for tag in product.tags.all %}
-                            <a class="ms-1" href="#!">{{ tag.tag_name }}</a>
+                            <a class="ms-1" href="{% url 'product_list_page' %}?tags={{ tag.slug }}">{{ tag.name }}</a>
                         {% endfor %}
 
                     </p>
@@ -74,10 +81,16 @@
                         <div class="col-auto px-2 px-md-3"><a class="btn btn-sm btn-primary" href="#!"><span
                                 class="fas fa-cart-plus me-sm-2"></span><span class="d-none d-sm-inline-block">Add To Cart</span></a>
                         </div>
-                        <div class="col-auto px-0"><a class="btn btn-sm btn-outline-danger border-300" href="#!"
-                                                      data-bs-toggle="tooltip" data-bs-placement="top"
-                                                      title="Add to Wish List"><span
-                                class="far fa-heart me-1"></span>282</a></div>
+                        <div class="col-auto px-0">
+                            <a class="btn btn-sm btn-outline-danger border-300" href="#!"
+                               data-bs-toggle="tooltip" data-bs-placement="top"
+                               title="Add to Wish List">
+                            <span
+                                    class="far fa-heart me-1">
+                            </span>
+                                282
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

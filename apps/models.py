@@ -35,8 +35,8 @@ class Product(Model):
     title = models.CharField(max_length=355)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     price_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    shopping_cost = models.DecimalField(max_digits=7, decimal_places=2)
-    quantity = models.PositiveIntegerField()
+    shopping_cost = models.DecimalField(default=0, max_digits=7, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=0)
     description = JSONField()
     short_description = CKEditor5Field()
     long_description = CKEditor5Field()
@@ -63,7 +63,19 @@ class ImageProduct(Model):
 
 
 class Tag(models.Model):
-    tag_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, editable=False)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            unique = self.slug
+            num = 1
+            while Category.objects.filter(slug=unique).exists():
+                unique = f'{self.slug}-{num}'
+                num += 1
+            self.slug = unique
+        super().save(force_insert, force_update, using, update_fields)
 
 
 class Review(Model):

@@ -12,6 +12,13 @@ from apps.models import Product, Category
 from apps.tasks import send_to_email
 
 
+class CategoryMixin:
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+
 class ProductLIstTemplateView(TemplateView):
     template_name = 'apps/product/product-list.html'
 
@@ -21,14 +28,13 @@ class ProductLIstTemplateView(TemplateView):
 #     template_name = 'apps/product/product-list.html'
 
 
-class ProductListTemplateView(ListView):
-    queryset = Product.objects.all()
+class ProductListTemplateView(CategoryMixin, ListView):
     template_name = 'apps/product/product-list.html'
     context_object_name = 'products'
     paginate_by = 2
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = Product.objects.all().order_by('id')
         category_slug = self.request.GET.get('category')
         if category_slug:
             qs = qs.filter(category__slug=category_slug)
@@ -39,31 +45,21 @@ class ProductListTemplateView(ListView):
             qs = qs.filter(title__icontains=search)
         return qs
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context['categories'] = Category.objects.all()
-        return context
 
-
-class ProductDetailTemplateView(DetailView):
+class ProductDetailTemplateView(CategoryMixin, DetailView):
     model = Product
     template_name = 'apps/product/product-details.html'
     context_object_name = 'product'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context['categories'] = Category.objects.all()
-        return context
-
 
 class RegisterCreateView(CreateView):
+    queryset = User.objects.all()
     template_name = 'apps/aouth/register.html'
     form_class = UserRegisterModelForm
     success_url = reverse_lazy('product_list_page')
 
     def form_valid(self, form):
         form.save()
-        # send_to_email('Your account has been created!', form.data['email'])
         send_to_email.delay('Your account has been created!', form.data['email'])
         return super().form_valid(form)
 
@@ -71,7 +67,7 @@ class RegisterCreateView(CreateView):
         return super().form_invalid(form)
 
 
-class SettingsUpdateView(LoginRequiredMixin, UpdateView):
+class SettingsUpdateView(CategoryMixin, LoginRequiredMixin, UpdateView):
     queryset = User.objects.all()
     fields = 'first_name', 'last_name'
     template_name = 'apps/aouth/settings.html'
@@ -79,11 +75,6 @@ class SettingsUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        context['categories'] = Category.objects.all()
-        return context
 
 
 # class CustomLoginView(LoginView):

@@ -1,4 +1,4 @@
-{% extends 'apps/product/base.html' %}
+{% extends 'apps/product/../base.html' %}
 {% load static %}
 
 {% block title %}
@@ -6,7 +6,7 @@
 {% endblock %}
 
 
-{% block main_content %}
+{% block content %}
     <div class="card mb-3">
         <div class="card-body">
             <div class="row flex-between-center">
@@ -159,6 +159,6 @@
                 {% endfor %}
             </div>
         </div>
-        {% include 'apps/parts/pagination.html' %}
+        {% include 'apps/parts/_pagination.html' %}
     </div>
 {% endblock %}

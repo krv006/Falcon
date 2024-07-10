@@ -1,4 +1,4 @@
-{% extends 'apps/product/base.html' %}
+{% extends 'apps/product/../base.html' %}
 {% load static %}
 
 {% block content %}
@@ -31,14 +31,14 @@
                 <div class="row gx-card mx-0 align-items-center border-bottom border-200">
                     <div class="col-8 py-3">
                         <div class="d-flex align-items-center">
-                            <a href="{% url 'product_detail_page' item.product.pk %}">
+                            <a href="{% url 'product_detail' item.product.pk %}">
                                 <img class="img-fluid rounded-1 me-3 d-none d-md-block"
                                      src="{{ item.product.images.first.image.url }}" alt="{{ item.product.title }}"
                                      width="60"/>
                             </a>
                             <div class="flex-1">
                                 <h5 class="fs-0">
-                                    <a class="text-900" href="{% url 'product_detail_page' item.product.pk %}">
+                                    <a class="text-900" href="{% url 'product_detail' item.product.pk %}">
                                         {{ item.product.title }}
                                     </a>
                                 </h5>

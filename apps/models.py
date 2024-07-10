@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
-from django.db.models import Model, JSONField
+from django.db.models import Model, JSONField, TextChoices, OneToOneField
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
@@ -12,6 +12,9 @@ from datetime import timedelta
 
 class User(AbstractUser):
     pass
+
+
+# class CreateBaseModel(Model):
 
 
 class Category(MPTTModel):
@@ -68,7 +71,7 @@ class ImageProduct(Model):
     product = models.ForeignKey('apps.Product', models.CASCADE, related_name='images')
 
 
-class Tag(models.Model):
+class Tag(Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, editable=False)
 
@@ -77,7 +80,7 @@ class Tag(models.Model):
             self.slug = slugify(self.name)
             unique = self.slug
             num = 1
-            while Category.objects.filter(slug=unique).exists():
+            while Tag.objects.filter(slug=unique).exists():
                 unique = f'{self.slug}-{num}'
                 num += 1
             self.slug = unique
@@ -96,9 +99,6 @@ class Review(Model):
         return self.name
 
 
-##################################
-
-
 class Favorite(Model):
     user = models.ForeignKey(User, models.CASCADE)
     product = models.ForeignKey('apps.Product', models.CASCADE)
@@ -106,6 +106,9 @@ class Favorite(Model):
 
     class Meta:
         unique_together = ('user', 'product')
+
+    # @property
+    # def
 
 
 class Cart(Model):
@@ -121,3 +124,39 @@ class CartItem(Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.title}"
+
+
+class Order(Model):
+    class PaymentMethod(TextChoices):
+        PAYPAL = 'paypal', 'Paypal'
+        CREDIT_CARD = 'credit_card', 'Credit_card'
+
+    status = ''
+    payment_method = models.CharField(max_length=255, choices=PaymentMethod)
+    address = models.ForeignKey('apps.Address', models.CASCADE)
+    owner = ''
+
+
+class Address(models.Model):
+    full_name = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    zip_code = models.PositiveIntegerField()
+    city = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+
+
+class OrderItem(Model):
+    product = models.ForeignKey('apps.Product', models.CASCADE)
+    order = models.ForeignKey('apps.Order', models.CASCADE, related_name='items')
+    quantity = models.PositiveIntegerField(default=0)
+
+
+class CreditCard(Model):
+    order = OneToOneField('apps.Order', models.CASCADE)
+    number = models.CharField(max_length=255)
+    cvv = models.CharField(max_length=255)
+    expire_date = models.DateField()
+
+
+class SiteSettings(Model):
+    tax = models.PositiveIntegerField()

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from mptt.admin import DraggableMPTTAdmin
+
 from apps.models import ImageProduct, Product, Category, Tag, Review
 from import_export.admin import ImportExportModelAdmin
 
@@ -13,7 +15,7 @@ class ImageProductStackedInline(admin.StackedInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(ImportExportModelAdmin):
+class CategoryAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     pass
 
 

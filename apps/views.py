@@ -13,12 +13,19 @@ from django.db.models import F, Sum
 from apps.models import User
 
 
-
 class CategoryMixin:
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context['categories'] = Category.objects.all()
+        context['categories'] = Category.objects.filter() # TODO Children dib yozish kerak
         return context
+
+
+# # Agar foydalanuvchi login qilgan bo'lsa, uni bosh sahifaga yo'naltiramiz
+# def register(request):
+#     if request.user.is_authenticated:
+#         return redirect('/')
+#     # Aks holda, register sahifasini ko'rsatamiz
+#     return render(request, 'apps/auth/register.html')
 
 
 class ProductLIstTemplateView(TemplateView):
@@ -56,7 +63,7 @@ class ProductDetailTemplateView(CategoryMixin, DetailView):
 
 class RegisterCreateView(CreateView):
     queryset = User.objects.all()
-    template_name = 'apps/aouth/register.html'
+    template_name = 'apps/auth/register.html'
     form_class = UserRegisterModelForm
     success_url = reverse_lazy('product_list_page')
 
@@ -72,7 +79,7 @@ class RegisterCreateView(CreateView):
 class SettingsUpdateView(CategoryMixin, LoginRequiredMixin, UpdateView):
     queryset = User.objects.all()
     fields = 'first_name', 'last_name'
-    template_name = 'apps/aouth/settings.html'
+    template_name = 'apps/auth/settings.html'
     success_url = reverse_lazy('settings_page')
 
     def get_object(self, queryset=None):
@@ -84,8 +91,8 @@ class FavouriteView(View):
 
     def get(self, request, *args, **kwargs):
         favourite_items = Favorite.objects.filter(user=request.user)
-        for item in favourite_items:
-            item.total_price = item.product.current_price
+        # for item in favourite_items: # TODO property ga otkazish kk
+        #     item.total_price = item.product.current_price
 
         context = {
             'favourite_items': favourite_items,
@@ -107,7 +114,7 @@ class AddToCartView(LoginRequiredMixin, View):
 
 
 class CustomLogoutView(View):
-    template_name = 'apps/auth/login.html'
+    template_name = 'apps/auth/login.html'  # TODO ishlamaydi
 
     def get(self, request, *args, **kwargs):
         logout(request)
@@ -118,7 +125,8 @@ class CartListView(CategoryMixin, ListView):
     queryset = CartItem.objects.all()
     template_name = 'apps/shop/shopping-cart.html'
     context_object_name = 'cart_items'
-    success_url = reverse_lazy('shopping_cart_page')
+
+    # success_url = reverse_lazy('shopping_cart_page') # TODO ishlamaydi
 
     def get_queryset(self):
         return super().get_queryset().filter(cart__user=self.request.user)
@@ -139,6 +147,6 @@ class CartListView(CategoryMixin, ListView):
 class CartItemDeleteView(CategoryMixin, View):
 
     def get(self, request, pk, *args, **kwargs):
-        cart_item = get_object_or_404(CartItem, pk=pk)
-        CartItem.objects.filter(cart__user=self.request.user, id=cart_item.id).delete()
+        cart_item = get_object_or_404(CartItem, pk=pk, cart__user=self.request.user)
+        cart_item.delete()
         return redirect('shopping_cart_page')

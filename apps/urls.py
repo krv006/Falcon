@@ -11,8 +11,8 @@ urlpatterns = [
     path('settings', SettingsUpdateView.as_view(), name='settings_page'),
     path('register', RegisterCreateView.as_view(), name='register_page'),
 
-    path('login', LoginView.as_view(template_name='apps/aouth/login.html'), name='login_page'),
-    path('logout', CustomLogoutView.as_view(template_name='apps/aouth/login.html'), name='logout_page'),
+    path('login', LoginView.as_view(template_name='apps/auth/login.html'), name='login_page'),
+    path('logout', CustomLogoutView.as_view(template_name='apps/auth/login.html'), name='logout_page'),
 
 
     path('shopping-cart', CartListView.as_view(), name='shopping_cart_page'),

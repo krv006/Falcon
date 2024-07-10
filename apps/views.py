@@ -1,15 +1,17 @@
 from django.views.generic import TemplateView
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from apps.forms import UserRegisterModelForm
-from apps.models import Product, Category
+from apps.models import Product, Category, Favorite, CartItem, Cart
 from apps.tasks import send_to_email
+from django.db.models import F, Sum
+from apps.models import User
+
 
 
 class CategoryMixin:
@@ -28,7 +30,7 @@ class ProductLIstTemplateView(TemplateView):
 #     template_name = 'apps/product/product-list.html'
 
 
-class ProductListTemplateView(CategoryMixin, ListView):
+class ProductListTemplateView(LoginRequiredMixin, CategoryMixin, ListView):
     template_name = 'apps/product/product-list.html'
     context_object_name = 'products'
     paginate_by = 2
@@ -77,14 +79,66 @@ class SettingsUpdateView(CategoryMixin, LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-# class CustomLoginView(LoginView):
-#     template_name = 'apps/auth/login.html'
-#     redirect_authenticated_user = True
-#     next_page = reverse_lazy('product_list_page')
+class FavouriteView(View):
+    template_name = 'apps/shop/favourite.html'
+
+    def get(self, request, *args, **kwargs):
+        favourite_items = Favorite.objects.filter(user=request.user)
+        for item in favourite_items:
+            item.total_price = item.product.current_price
+
+        context = {
+            'favourite_items': favourite_items,
+        }
+        return render(request, self.template_name, context)
 
 
-class LogoutView(View):
+class AddToCartView(LoginRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        product = get_object_or_404(Product, id=pk)
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+        return redirect('shopping_cart_page')
+
+
+class CustomLogoutView(View):
+    template_name = 'apps/auth/login.html'
 
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('product_list_page')
+
+
+class CartListView(CategoryMixin, ListView):
+    queryset = CartItem.objects.all()
+    template_name = 'apps/shop/shopping-cart.html'
+    context_object_name = 'cart_items'
+    success_url = reverse_lazy('shopping_cart_page')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(cart__user=self.request.user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super().get_context_data(object_list=object_list, **kwargs)
+        qs = self.get_queryset()
+
+        ctx.update(
+            **qs.aggregate(
+                total_sum=Sum(F('quantity') * F('product__price') * (100 - F('product__price_percentage')) / 100),
+                total_count=Sum(F('quantity'))
+            )
+        )
+        return ctx
+
+
+class CartItemDeleteView(CategoryMixin, View):
+
+    def get(self, request, pk, *args, **kwargs):
+        cart_item = get_object_or_404(CartItem, pk=pk)
+        CartItem.objects.filter(cart__user=self.request.user, id=cart_item.id).delete()
+        return redirect('shopping_cart_page')

@@ -19,7 +19,7 @@
                                 href="{% url 'register_page' %}">Create an account</a></span>
                         </div>
                     </div>
-                    <form method="post" action="{% url 'login_page' %}">
+                    <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
                             <input class="form-control" type="text" placeholder="Username" name="username"/>
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">
+                            <button class="btn btn-primary d-block w-100 mt-3" type="submit">
                                 Log in
                             </button>
                         </div>

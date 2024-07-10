@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField
+from apps.models import User
 
 
 class UserRegisterModelForm(ModelForm):

@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'colorfield',
     'django_ckeditor_5',
     'import_export',
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTH_USER_MODEL = 'apps.User'
 
 # DATABASES = {
 #     'default': {
@@ -224,15 +228,45 @@ CKEDITOR_5_CONFIGS = {
     }
 }
 
+CELERY_TIMEZONE = "Australia/Tasmania"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+LOGIN_URL = 'login_page'
+LOGOUT_REDIRECT_URL = 'login_page'
+LOGIN_REDIRECT_URL = 'product_list_page'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_CACHE_BACKEND = 'default'
+
 # LOGGING = {
-#     "handlers": {
-#         "console": {"level": "DEBUG", "class": "logging.StreamHandler"},
+#     'version': 1,
+#     'filters': {
+#         'require_debug_true': {
+#             '()': 'django.utils.log.RequireDebugTrue',
+#         }
 #     },
-#     "loggers": {
-#         "django.db.backends": {"level": "INFO", "handlers": ["console"]},
-#         "import_export": {
-#             "handlers": ["console"],
-#             "level": "INFO",
-#         },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'filters': ['require_debug_true'],
+#             'class': 'logging.StreamHandler',
+#         }
 #     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'level': 'DEBUG',
+#             'handlers': ['console'],
+#         }
+#     }
 # }

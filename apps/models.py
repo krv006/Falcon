@@ -1,11 +1,17 @@
+from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from django.db.models import Model, JSONField
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
 from django.utils.timezone import now
+from django.contrib.auth.models import AbstractUser
 
 from datetime import timedelta
+
+
+class User(AbstractUser):
+    pass
 
 
 class Category(MPTTModel):
@@ -88,3 +94,30 @@ class Review(Model):
 
     def __str__(self):
         return self.name
+
+
+##################################
+
+
+class Favorite(Model):
+    user = models.ForeignKey(User, models.CASCADE)
+    product = models.ForeignKey('apps.Product', models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+
+class Cart(Model):
+    user = models.ForeignKey('apps.User', models.CASCADE)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class CartItem(Model):
+    product = models.ForeignKey('apps.Product', models.CASCADE)
+    cart = models.ForeignKey('apps.Cart', models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.title}"

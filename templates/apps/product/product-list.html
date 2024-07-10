@@ -139,13 +139,18 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class="mt-2"><a
-                                                class="btn btn-sm btn-outline-secondary border-300 d-lg-block me-2 me-lg-0"
-                                                href="#!"><span class="far fa-heart"></span><span
-                                                class="ms-2 d-none d-md-inline-block">Favourite</span></a><a
-                                                class="btn btn-sm btn-primary d-lg-block mt-lg-2" href="#!"><span
-                                                class="fas fa-cart-plus"> </span><span
-                                                class="ms-2 d-none d-md-inline-block">Add to Cart</span></a></div>
+                                        <div class="mt-2">
+{#                                            <a class="btn btn-sm btn-outline-secondary border-300 d-lg-block me-2 me-lg-0"#}
+{#                                               href="{% url 'addfavourites_page' product.pk %}">#}
+{#                                                <span class="far fa-heart"></span>#}
+{#                                                <span class="ms-2 d-none d-md-inline-block">Favourite</span>#}
+{#                                            </a>#}
+                                            <a class="btn btn-sm btn-primary d-lg-block mt-lg-2"
+                                               href="{% url 'add_cart_page' product.pk %}">
+                                                <span class="fas fa-cart-plus"> </span>
+                                                <span class="ms-2 d-none d-md-inline-block">Add to Cart</span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

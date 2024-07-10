@@ -2,6 +2,8 @@ from django.contrib import admin
 from apps.models import ImageProduct, Product, Category, Tag, Review
 from import_export.admin import ImportExportModelAdmin
 
+from .models import User
+
 
 class ImageProductStackedInline(admin.StackedInline):
     model = ImageProduct
@@ -15,11 +17,17 @@ class CategoryAdmin(ImportExportModelAdmin):
     pass
 
 
+# admin.site.register(User)
+
+@admin.register(User)
+class UserAdmin(ImportExportModelAdmin):
+    pass
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'price')
     inlines = ImageProductStackedInline,
-
 
 
 @admin.register(ImageProduct)

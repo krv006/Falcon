@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField
 from apps.models import User
+from django import forms
+from .models import Order
 
 
 class UserRegisterModelForm(ModelForm):
@@ -22,3 +24,15 @@ class UserRegisterModelForm(ModelForm):
         user.set_password(self.cleaned_data["password"])
         user.save()
         return user
+
+
+class CheckoutForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['status', 'payment_method', 'address']
+
+        widgets = {
+            'status': forms.Select(choices=Order.StatusMethod.choices),
+            'payment_method': forms.Select(choices=Order.PaymentMethod.choices),
+            'address': forms.Select()
+        }

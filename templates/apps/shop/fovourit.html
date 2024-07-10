@@ -12,7 +12,7 @@
                     <a class="btn btn-sm btn-outline-secondary border-300 me-2" href="{% url 'product_list_page' %}">
                         <span class="fas fa-chevron-left me-1" data-fa-transform="shrink-4"></span>Continue Shopping
                     </a>
-                    <a class="btn btn-sm btn-primary" href="CHECKOUT">Checkout</a>
+                    <a class="btn btn-sm btn-primary" href="{% url 'checkout_page' %}">Checkout</a>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                                 </button>
                             </div>
                             <div class="col-md-4 text-end ps-0 order-0 order-md-2 text-600">
-                                ${{ item.product.current_price }}</div>
+                                ${{ item.product.new_price }}</div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
         <div class="card-footer bg-light d-flex justify-content-end">
             <form class="me-3">
             </form>
-            <a class="btn btn-sm btn-primary" href="CHECKOUT">Checkout</a>
+            <a class="btn btn-sm btn-primary" href="{% url 'checkout_page' %}">Checkout</a>
         </div>
     </div>
 {% endblock %}

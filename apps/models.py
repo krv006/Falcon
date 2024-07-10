@@ -127,17 +127,27 @@ class CartItem(Model):
 
 
 class Order(Model):
+    class StatusMethod(TextChoices):
+        COMPLATED = 'complated', 'Complated'
+        PROCESSING = 'processing', 'Processing'
+        ON_HOLD = 'on hold', 'On Hold'
+        PENDING = 'pending', 'Pending'
+
     class PaymentMethod(TextChoices):
         PAYPAL = 'paypal', 'Paypal'
         CREDIT_CARD = 'credit_card', 'Credit_card'
 
-    status = ''
+    status = models.CharField(max_length=255, choices=StatusMethod)
     payment_method = models.CharField(max_length=255, choices=PaymentMethod)
     address = models.ForeignKey('apps.Address', models.CASCADE)
-    owner = ''
+    owner = models.ForeignKey('apps.User', models.CASCADE, related_name='orders')
+
+    def __str__(self):
+        return f'Order {self.id} - {self.status}'
 
 
 class Address(models.Model):
+    user = models.ForeignKey('apps.User', models.CASCADE)
     full_name = models.CharField(max_length=255)
     street = models.CharField(max_length=255)
     zip_code = models.PositiveIntegerField()

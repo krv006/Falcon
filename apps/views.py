@@ -6,26 +6,18 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from apps.forms import UserRegisterModelForm
-from apps.models import Product, Category, Favorite, CartItem, Cart
+from apps.forms import UserRegisterModelForm, CheckoutForm
+from apps.models import Product, Category, Favorite, CartItem, Cart, Address
 from apps.tasks import send_to_email
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Q
 from apps.models import User
 
 
 class CategoryMixin:
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context['categories'] = Category.objects.filter() # TODO Children dib yozish kerak
+        context['categories'] = Category.objects.filter()  # TODO Children dib yozish kerak
         return context
-
-
-# # Agar foydalanuvchi login qilgan bo'lsa, uni bosh sahifaga yo'naltiramiz
-# def register(request):
-#     if request.user.is_authenticated:
-#         return redirect('/')
-#     # Aks holda, register sahifasini ko'rsatamiz
-#     return render(request, 'apps/auth/register.html')
 
 
 class ProductLIstTemplateView(TemplateView):
@@ -34,7 +26,7 @@ class ProductLIstTemplateView(TemplateView):
 
 # class ProductLIstTemplateView(TemplateView):
 #     queryset = Product.objects.order_by('-created_at) bunda oxirgi qoshilganlarini boshda chiqazib beradi
-#     template_name = 'apps/product/product-list.html'
+#     template_name = 'ap;ps/product/product-list.html'
 
 
 class ProductListTemplateView(LoginRequiredMixin, CategoryMixin, ListView):
@@ -50,8 +42,8 @@ class ProductListTemplateView(LoginRequiredMixin, CategoryMixin, ListView):
         if ordering := self.request.GET.get('ordering'):
             qs = qs.order_by(ordering)
         search = self.request.GET.get('search')
-        if search:
-            qs = qs.filter(title__icontains=search)
+        if search := self.request.GET.get('search'):
+            qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search) | Q(about__icontains=search))
         return qs
 
 
@@ -150,3 +142,31 @@ class CartItemDeleteView(CategoryMixin, View):
         cart_item = get_object_or_404(CartItem, pk=pk, cart__user=self.request.user)
         cart_item.delete()
         return redirect('shopping_cart_page')
+
+
+class CheckoutView(CategoryMixin, View):
+    template_name = 'apps/shop/checkout.html'
+
+    def get(self, request):
+        form = CheckoutForm()
+        return render(request, 'apps/shop/checkout.html', {'form': form})
+
+    def post(self, request):
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user
+            order.save()
+            return redirect('order_summary')
+        return render(request, 'apps/shop/checkout.html', {'form': form})
+
+
+class AddressCreateView(CategoryMixin, CreateView):
+    model = Address
+    template_name = 'apps/address/address_create.html'
+    fields = 'city', 'street', 'zip_code', 'full_name', 'phone'
+    context_object_name = 'create_address'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)

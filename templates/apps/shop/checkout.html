@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    
+
     <div class="row g-3">
         <div class="col-xl-4 order-xl-1">
             <div class="card">
@@ -132,20 +132,20 @@
                             <div class="col-4 ps-3 text-center pt-2 d-none d-sm-block">
                                 <div class="rounded-1 p-2 mt-3 bg-100">
                                     <div class="text-uppercase fs--2 fw-bold">We Accept</div>
-                                    <img src="../../assets/img/icons/icon-payment-methods-grid.png" alt="" width="120"/>
+                                    <img src="{% static 'apps/assets/img/icons/icon-payment-methods-grid.png' %}" alt="" width="120"/>
                                 </div>
                             </div>
                         </div>
                         <div class="form-check d-flex align-items-center">
                             <input class="form-check-input" type="radio" value="" id="paypal" name="payment-method"/>
                             <label class="form-check-label mb-0 ms-2" for="paypal"><img
-                                    src="../../assets/img/icons/icon-paypal-full.png" height="20" alt=""/>
+                                    src="{% static 'apps/assets/img/icons/icon-paypal-full.png' %}" height="20" alt=""/>
                             </label>
                         </div>
                         <div class="border-dashed-bottom my-5"></div>
                         <div class="row">
                             <div class="col-md-7 col-xl-12 col-xxl-7 px-md-3 mb-xxl-0 position-relative">
-                                <div class="d-flex"><img class="me-3" src="../../assets/img/icons/shield.png" alt=""
+                                <div class="d-flex"><img class="me-3" src="{% static 'apps/assets/img/icons/shield.png'  %}" alt=""
                                                          width="60" height="60"/>
                                     <div class="flex-1">
                                         <h5 class="mb-2">Buyer Protection</h5>
@@ -185,5 +185,5 @@
             </div>
         </div>
     </div>
-    
+
 {% endblock %}

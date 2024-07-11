@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from apps.forms import UserRegisterModelForm, CheckoutForm
+from apps.forms import UserRegisterModelForm
 from apps.models import Product, Category, Favorite, CartItem, Cart, Address
 from apps.tasks import send_to_email
 from django.db.models import F, Sum, Q
@@ -146,23 +146,6 @@ class CartItemDeleteView(CategoryMixin, View):
         return redirect('shopping_cart_page')
 
 
-class CheckoutView(CategoryMixin, View):
-    template_name = 'apps/shop/checkout.html'
-
-    def get(self, request):
-        form = CheckoutForm()
-        return render(request, 'apps/shop/checkout.html', {'form': form})
-
-    def post(self, request):
-        form = CheckoutForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user
-            order.save()
-            return redirect('order_summary')
-        return render(request, 'apps/shop/checkout.html', {'form': form})
-
-
 class AddressCreateView(CategoryMixin, CreateView):
     model = Address
     template_name = 'apps/address/address_create.html'
@@ -172,3 +155,14 @@ class AddressCreateView(CategoryMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class AddressUpdateView(CategoryMixin, UpdateView):
+    model = Address
+    template_name = 'apps/address/address_create.html'
+    fields = 'city', 'street', 'zip_code', 'full_name', 'phone'
+    success_url = reverse_lazy('address_page')
+
+
+class CheckoutView(CategoryMixin, TemplateView):
+    template_name = 'apps/shop/checkout.html'

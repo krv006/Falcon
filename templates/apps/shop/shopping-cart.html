@@ -101,15 +101,15 @@
                     <button class="btn btn-outline-secondary border-300 btn-sm" type="submit">Apply</button>
                 </div>
             </form>
-            <a class="btn btn-sm btn-primary" href="Checkout">Checkout</a>
+            <a class="btn btn-sm btn-primary" href="{% url 'checkout_page' %}">Checkout</a>
         </div>
     </div>
 
-    {#    <script>#}
-    {#        function confirmDelete(itemId) {#}
-    {#            if (confirm("Are you sure you want to delete this item?")) {#}
-    {#                window.location.href = "{% url 'delete_cart_item' %}?item_id=" + itemId;#}
-    {#            }#}
-    {#        }#}
-    {#    </script>#}
+{#        <script>#}
+{#            function confirmDelete(itemId) {#}
+{#                if (confirm("Are you sure you want to delete this item?")) {#}
+{#                    window.location.href = "{% url 'delete_cart_item' %}?item_id=" + itemId;#}
+{#                }#}
+{#            }#}
+{#        </script>#}
 {% endblock %}

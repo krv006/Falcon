@@ -11,7 +11,9 @@ from datetime import timedelta
 
 
 class User(AbstractUser):
-    pass
+    @property
+    def cart_caount(self):
+        return self.cart
 
 
 # class CreateBaseModel(Model):
@@ -125,6 +127,9 @@ class CartItem(Model):
     def __str__(self):
         return f"{self.quantity} x {self.product.title}"
 
+    @property
+    def amount(self):
+        return self.quantity * self.product.new_price
 
 class Order(Model):
     class StatusMethod(TextChoices):

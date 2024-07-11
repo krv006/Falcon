@@ -39,11 +39,13 @@ class ProductListTemplateView(LoginRequiredMixin, CategoryMixin, ListView):
         category_slug = self.request.GET.get('category')
         if category_slug:
             qs = qs.filter(category__slug=category_slug)
+        if tags_slug := self.request.GET.get('tag'):
+            qs = qs.filter(tags__slug=tags_slug)
         if ordering := self.request.GET.get('ordering'):
             qs = qs.order_by(ordering)
-        search = self.request.GET.get('search')
+        # search = self.request.GET.get('search')
         if search := self.request.GET.get('search'):
-            qs = qs.filter(Q(name__icontains=search) | Q(description__icontains=search) | Q(about__icontains=search))
+            qs = qs.filter(Q(title__icontains=search) | Q(description__icontains=search))
         return qs
 
 

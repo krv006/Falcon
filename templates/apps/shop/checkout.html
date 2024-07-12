@@ -75,7 +75,8 @@
                                 <label class="form-check-label mb-0 fw-bold d-block" for="address-1">Antony Hopkins<span
                                         class="radio-select-content"><span> 2392 Main Avenue,<br/>Pensaukee,<br/>New Jersey 02139<span
                                         class="d-block mb-0 pt-2">+(856) 929-229</span></span></span></label><a
-                                    class="fs--1" href="#!">Edit</a>
+{#                                    class="fs--1" href="{% url 'update_address' address.pk %}">Edit</a>#}
+                                    class="fs--1" href="{% url 'address_page' %}">Edit</a>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -86,7 +87,7 @@
                                         Bruce<span
                                                 class="radio-select-content"><span>3448 Ile De France St #242<br/>Fort Wainwright, <br/>Alaska, 99703<span
                                                 class="d-block mb-0 pt-2">+(901) 637-734</span></span></span></label><a
-                                        class="fs--1" href="#!">Edit</a>
+                                        class="fs--1" href="{% url 'update_address' 1 %}">Edit</a>
                                 </div>
                             </div>
                         </div>

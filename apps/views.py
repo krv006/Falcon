@@ -149,7 +149,7 @@ class CartItemDeleteView(CategoryMixin, View):
 class AddressCreateView(CategoryMixin, CreateView):
     model = Address
     template_name = 'apps/address/address_create.html'
-    fields = 'city', 'street', 'zip_code', 'full_name', 'phone'
+    fields = 'full_name',  'phone', 'city', 'street', 'zip_code'
     context_object_name = 'create_address'
 
     def form_valid(self, form):
@@ -159,9 +159,10 @@ class AddressCreateView(CategoryMixin, CreateView):
 
 class AddressUpdateView(CategoryMixin, UpdateView):
     model = Address
-    template_name = 'apps/address/address_create.html'
-    fields = 'city', 'street', 'zip_code', 'full_name', 'phone'
-    success_url = reverse_lazy('address_page')
+    template_name = 'apps/address/edit.html'
+    fields = ['city', 'street', 'zip_code', 'phone']
+    success_url = reverse_lazy('checkout_page')
+    context_object_name = 'address'
 
 
 class CheckoutView(CategoryMixin, TemplateView):

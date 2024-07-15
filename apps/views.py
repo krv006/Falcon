@@ -1,15 +1,14 @@
-from django.views.generic import TemplateView
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render, get_object_or_404
+from django.db.models import F, Sum, Q, Prefetch
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.core.cache import cache
 
 from apps.forms import UserRegisterModelForm
-from apps.models import Product, Category, Favorite, CartItem, Cart, Address
-from apps.tasks import send_to_email
-from django.db.models import F, Sum, Q
+from apps.models import Product, Category, Favorite, CartItem, Address, ImageProduct
 from apps.models import User
 
 
@@ -20,22 +19,19 @@ class CategoryMixin:
         return context
 
 
-class ProductLIstTemplateView(TemplateView):
-    template_name = 'apps/product/product-list.html'
-
-
-# class ProductLIstTemplateView(TemplateView):
-#     queryset = Product.objects.order_by('-created_at) bunda oxirgi qoshilganlarini boshda chiqazib beradi
-#     template_name = 'ap;ps/product/product-list.html'
-
-
-class ProductListTemplateView(LoginRequiredMixin, CategoryMixin, ListView):
+class ProductListView(CategoryMixin, ListView):
+    queryset = Product.objects.select_related('category').prefetch_related('images').order_by('id')
     template_name = 'apps/product/product-list.html'
     context_object_name = 'products'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
-        qs = Product.objects.all().order_by('id')
+
+        if cache.get('product_list'):
+            return cache.get('product_list')
+        qs = super().get_queryset()
+        cache.set('product_list', qs, timeout=7200)
+
         category_slug = self.request.GET.get('category')
         if category_slug:
             qs = qs.filter(category__slug=category_slug)
@@ -62,8 +58,8 @@ class RegisterCreateView(CreateView):
     success_url = reverse_lazy('product_list_page')
 
     def form_valid(self, form):
+        # send_to_email.delay('Your account has been created!', form.data['email'])
         form.save()
-        send_to_email.delay('Your account has been created!', form.data['email'])
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -83,22 +79,17 @@ class SettingsUpdateView(CategoryMixin, LoginRequiredMixin, UpdateView):
 class FavouriteView(View):
     template_name = 'apps/shop/favourite.html'
 
-    def get(self, request, *args, **kwargs):
-        favourite_items = Favorite.objects.filter(user=request.user)
-        # for item in favourite_items: # TODO property ga otkazish kk
-        #     item.total_price = item.product.current_price
-
-        context = {
-            'favourite_items': favourite_items,
-        }
-        return render(request, self.template_name, context)
+    def get(self, request, pk, *args, **kwargs):
+        obj, created = Favorite.objects.get_or_create(user=request.user, product_id=pk)
+        if not created:
+            obj.delete()
+        return redirect('product_detail', pk=pk)
 
 
 class AddToCartView(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         product = get_object_or_404(Product, id=pk)
-        cart, created = Cart.objects.get_or_create(user=request.user)
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
 
         if not created:
             cart_item.quantity += 1
@@ -116,14 +107,10 @@ class CustomLogoutView(View):
 
 
 class CartListView(CategoryMixin, ListView):
-    queryset = CartItem.objects.all()
+    # queryset = Category.objects.prefetch_related('product') # 1 -> N
+    queryset = CartItem.objects.select_related('product')  # N -> 1
     template_name = 'apps/shop/shopping-cart.html'
     context_object_name = 'cart_items'
-
-    # success_url = reverse_lazy('shopping_cart_page') # TODO ishlamaydi
-
-    def get_queryset(self):
-        return super().get_queryset().filter(cart__user=self.request.user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
@@ -149,7 +136,7 @@ class CartItemDeleteView(CategoryMixin, View):
 class AddressCreateView(CategoryMixin, CreateView):
     model = Address
     template_name = 'apps/address/address_create.html'
-    fields = 'full_name',  'phone', 'city', 'street', 'zip_code'
+    fields = 'full_name', 'phone', 'city', 'street', 'zip_code'
     context_object_name = 'create_address'
 
     def form_valid(self, form):
@@ -165,5 +152,10 @@ class AddressUpdateView(CategoryMixin, UpdateView):
     context_object_name = 'address'
 
 
-class CheckoutView(CategoryMixin, TemplateView):
+class CheckoutListView(LoginRequiredMixin, CategoryMixin, ListView):
+    queryset = CartItem.objects.all()
     template_name = 'apps/shop/checkout.html'
+    context_object_name = 'cart_items'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user=self.request.user)

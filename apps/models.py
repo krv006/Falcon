@@ -1,19 +1,19 @@
+from datetime import timedelta
+
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Model, JSONField, TextChoices, OneToOneField
 from django.utils.text import slugify
+from django.utils.timezone import now
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
-from django.utils.timezone import now
-from django.contrib.auth.models import AbstractUser
-
-from datetime import timedelta
 
 
 class User(AbstractUser):
     @property
-    def cart_caount(self):
-        return self.cart
+    def cart_count(self):
+        return self.cart_items.count()
 
 
 # class CreateBaseModel(Model):
@@ -109,21 +109,15 @@ class Favorite(Model):
     class Meta:
         unique_together = ('user', 'product')
 
-    # @property
-    # def
-
-
-class Cart(Model):
-    user = models.ForeignKey('apps.User', models.CASCADE)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
 
 class CartItem(Model):
     product = models.ForeignKey('apps.Product', models.CASCADE)
-    cart = models.ForeignKey('apps.Cart', models.CASCADE)
+    user = models.ForeignKey('apps.User', models.CASCADE, related_name='cart_items')
     quantity = models.PositiveIntegerField(default=1)
 
+    # class Meta:
+    #     unique_together = ('user', 'product')
+    #
     def __str__(self):
         return f"{self.quantity} x {self.product.title}"
 
@@ -131,9 +125,10 @@ class CartItem(Model):
     def amount(self):
         return self.quantity * self.product.new_price
 
+
 class Order(Model):
     class StatusMethod(TextChoices):
-        COMPLATED = 'complated', 'Complated'
+        COMPLETED = 'completed', 'Completed'
         PROCESSING = 'processing', 'Processing'
         ON_HOLD = 'on hold', 'On Hold'
         PENDING = 'pending', 'Pending'

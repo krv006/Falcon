@@ -1,5 +1,5 @@
-{% extends 'apps/product/../base.html' %}
-
+{% extends 'apps/base.html' %}
+{% load custom_tags %}
 {% load static %}
 
 {% block content %}
@@ -83,13 +83,11 @@
                                 class="fas fa-cart-plus me-sm-2"></span><span class="d-none d-sm-inline-block">Add To Cart</span></a>
                         </div>
                         <div class="col-auto px-0">
-                            <a class="btn btn-sm btn-outline-danger border-300" href="#!"
+                            <a class="btn btn-sm btn{% if not user|is_liked:product %}-outline{% endif %}-danger border-300" href="{% url 'add_favorite' product.id %}"
                                data-bs-toggle="tooltip" data-bs-placement="top"
                                title="Add to Wish List">
-                            <span
-                                    class="far fa-heart me-1">
-                            </span>
-                                282
+                            <span class="far fa-heart me-1"></span>
+                                {{ product.favorite_set.count }}
                             </a>
                         </div>
                     </div>

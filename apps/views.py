@@ -45,6 +45,8 @@ class ProductListView(CategoryMixin, ListView):
         return qs
 
 
+
+
 class ProductDetailTemplateView(CategoryMixin, DetailView):
     model = Product
     template_name = 'apps/product/product-details.html'

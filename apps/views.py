@@ -134,6 +134,7 @@ class AddressCreateView(CategoryMixin, CreateView):
     template_name = 'apps/address/address_create.html'
     fields = 'full_name', 'phone', 'city', 'street', 'zip_code'
     context_object_name = 'create_address'
+    success_url = reverse_lazy('shopping_cart_page')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -145,7 +146,6 @@ class AddressUpdateView(CategoryMixin, UpdateView):
     template_name = 'apps/address/edit.html'
     fields = ['city', 'street', 'zip_code', 'phone']
     success_url = reverse_lazy('checkout_page')
-    context_object_name = 'address'
 
 
 class CheckoutListView(LoginRequiredMixin, CategoryMixin, ListView):

@@ -39,7 +39,6 @@ class ProductListView(CategoryMixin, ListView):
             qs = qs.filter(tags__slug=tags_slug)
         if ordering := self.request.GET.get('ordering'):
             qs = qs.order_by(ordering)
-        # search = self.request.GET.get('search')
         if search := self.request.GET.get('search'):
             qs = qs.filter(Q(title__icontains=search) | Q(description__icontains=search))
         return qs

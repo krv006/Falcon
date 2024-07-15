@@ -22,3 +22,4 @@ class UserRegisterModelForm(ModelForm):
         user.set_password(self.cleaned_data["password"])
         user.save()
         return user
+

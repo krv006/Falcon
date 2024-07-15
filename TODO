@@ -77,3 +77,17 @@ TODO
 
 n + 1
 UUID
+
+
+
+TODO
+"debug_toolbar",
+'apps.apps.AppsConfig',
+
+yangi kutubxonalar
+
+
+TODO
+cache boladgan narsalardi saqlab olish kk
+magazinga qilinadgan planlarda shuni xam olib qoyish kerak
+

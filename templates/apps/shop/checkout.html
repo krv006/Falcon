@@ -81,7 +81,7 @@
                                            checked="checked"/>
                                     <label class="form-check-label mb-0 fw-bold d-block"
                                            for="address-1">{{ address.full_name }}<span
-                                            class="radio-select-content"><span> 2392 Main Avenue,<br/>Pensaukee,<br/>New Jersey 02139<span
+                                            class="radio-select-content"><span>{{ address.street }},<br/>Pensaukee,<br/>{{ address.city}} {{ address.zip_code }}<span
                                             class="d-block mb-0 pt-2">
                                         <a href="tel:{{ address.phone|str_to_phone }}">
                                             {{ address.phone|str_to_phone }}

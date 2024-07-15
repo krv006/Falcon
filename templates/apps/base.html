@@ -31,7 +31,7 @@
                 <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
                     <li class="nav-item">
                         {% for category in categories %}
-                            <a class="nav-link" href="{% url 'product_list_page' %}?category={{ category.slug }}"
+                            <a class="nav-link" href="{% url 'product_list_page' %}?category={{ category.slug }}    "
                                role="button"
                                aria-expanded="false">
                                 <div class="d-flex align-items-center"><span class="nav-link-icon">

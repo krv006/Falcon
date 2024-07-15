@@ -4,7 +4,7 @@ from django.db.models import F, Sum, Q, Prefetch
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.core.cache import cache
 
 from apps.forms import UserRegisterModelForm
@@ -43,8 +43,6 @@ class ProductListView(CategoryMixin, ListView):
         if search := self.request.GET.get('search'):
             qs = qs.filter(Q(title__icontains=search) | Q(description__icontains=search))
         return qs
-
-
 
 
 class ProductDetailTemplateView(CategoryMixin, DetailView):
@@ -101,7 +99,7 @@ class AddToCartView(LoginRequiredMixin, View):
 
 
 class CustomLogoutView(View):
-    template_name = 'apps/auth/login.html'  # TODO ishlamaydi
+    template_name = 'apps/auth/login.html'  # Togirlab qoyish kerak
 
     def get(self, request, *args, **kwargs):
         logout(request)
@@ -127,12 +125,9 @@ class CartListView(CategoryMixin, ListView):
         return ctx
 
 
-class CartItemDeleteView(CategoryMixin, View):
-
-    def get(self, request, pk, *args, **kwargs):
-        cart_item = get_object_or_404(CartItem, pk=pk, cart__user=self.request.user)
-        cart_item.delete()
-        return redirect('shopping_cart_page')
+class CartItemDeleteView(DeleteView):
+    model = CartItem
+    success_url = reverse_lazy('shopping_cart_page')  # TODO togirlash kk delete ni
 
 
 class AddressCreateView(CategoryMixin, CreateView):
@@ -161,3 +156,13 @@ class CheckoutListView(LoginRequiredMixin, CategoryMixin, ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
+
+
+class CustomSettings(LoginRequiredMixin, CategoryMixin, UpdateView):
+    queryset = User.objects.all()
+    fields = 'first_name', 'last_name'
+    template_name = 'apps/auth/settings.html'
+    success_url = reverse_lazy('settings_page')
+
+    def get_object(self, queryset=None):
+        return self.request.user

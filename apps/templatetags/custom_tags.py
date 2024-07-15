@@ -11,8 +11,7 @@ def str_to_phone(value, arg=None):
         return value
     return f"+998{value}"
 
+
 @register.filter()
 def is_liked(user, product) -> bool:
     return Favorite.objects.filter(user=user, product=product).exists()
-
-

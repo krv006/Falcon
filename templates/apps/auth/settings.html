@@ -1,7 +1,7 @@
-{% extends 'apps/product/../base.html' %}
+{% extends 'apps/base.html' %}
 {% load static %}
 
-{% block main_content %}
+{% block content %}
     <div class="row">
         <div class="col-12">
             <div class="card mb-3 btn-reveal-trigger">
@@ -10,8 +10,6 @@
                         <div class="bg-holder rounded-3 rounded-bottom-0"
                              style="background-image:url({% static 'apps/assets/img/generic/4.jpg' %});">
                         </div>
-                        <!--/.bg-holder-->
-
                         <input class="d-none" id="upload-cover-image" type="file"/>
                         <label class="cover-image-file-input" for="upload-cover-image"><span
                                 class="fas fa-camera me-2"></span><span>Change cover photo</span></label>
@@ -42,11 +40,13 @@
                         {% csrf_token %}
                         <div class="col-lg-6">
                             <label class="form-label" for="first-name">First Name</label>
-                            <input class="form-control" id="first-name" type="text" name="first_name" value="{{ user.first_name }}"/>
+                            <input class="form-control" id="first-name" type="text" name="first_name"
+                                   value="{{ user.first_name }}"/>
                         </div>
                         <div class="col-lg-6">
                             <label class="form-label" for="last-name">Last Name</label>
-                            <input class="form-control" id="last-name" type="text" name="last_name" value="{{ user.last_name }}"/>
+                            <input class="form-control" id="last-name" type="text" name="last_name"
+                                   value="{{ user.last_name }}"/>
                         </div>
                         <div class="col-lg-6">
                             <label class="form-label" for="email1">Email</label>
@@ -135,7 +135,8 @@
                         </form>
                         <div class="border-dashed-bottom my-4"></div>
                     </div>
-                    <div class="d-flex"><a href="#!"> <img class="img-fluid" src="{% static 'apps/assets/img/logos/g.png' %}" alt=""
+                    <div class="d-flex"><a href="#!"> <img class="img-fluid"
+                                                           src="{% static 'apps/assets/img/logos/g.png' %}" alt=""
                                                            width="56"/></a>
                         <div class="flex-1 position-relative ps-3">
                             <h6 class="fs-0 mb-0">Big Data Engineer<span data-bs-toggle="tooltip"
@@ -148,7 +149,8 @@
                             <div class="border-dashed-bottom my-3"></div>
                         </div>
                     </div>
-                    <div class="d-flex"><a href="#!"> <img class="img-fluid" src="{% static 'apps/assets/img/logos/apple.png' %}"
+                    <div class="d-flex"><a href="#!"> <img class="img-fluid"
+                                                           src="{% static 'apps/assets/img/logos/apple.png' %}"
                                                            alt="" width="56"/></a>
                         <div class="flex-1 position-relative ps-3">
                             <h6 class="fs-0 mb-0">Software Engineer<span data-bs-toggle="tooltip"
@@ -161,7 +163,8 @@
                             <div class="border-dashed-bottom my-3"></div>
                         </div>
                     </div>
-                    <div class="d-flex"><a href="#!"> <img class="img-fluid" src="{% static 'apps/assets/img/logos/nike.png' %}"
+                    <div class="d-flex"><a href="#!"> <img class="img-fluid"
+                                                           src="{% static 'apps/assets/img/logos/nike.png' %}"
                                                            alt="" width="56"/></a>
                         <div class="flex-1 position-relative ps-3">
                             <h6 class="fs-0 mb-0">Mobile App Developer<span data-bs-toggle="tooltip"
@@ -241,7 +244,8 @@
                             <div class="border-dashed-bottom my-3"></div>
                         </div>
                     </div>
-                    <div class="d-flex"><a href="#!"> <img class="img-fluid" src="{% static 'apps/assets/img/logos/staten.png' %}"
+                    <div class="d-flex"><a href="#!"> <img class="img-fluid"
+                                                           src="{% static 'apps/assets/img/logos/staten.png' %}"
                                                            alt="" width="56"/></a>
                         <div class="flex-1 position-relative ps-3">
                             <h6 class="fs-0 mb-0"><a href="#!">Staten Island Technical High School<span
@@ -255,7 +259,8 @@
                         </div>
                     </div>
                     <div class="d-flex"><a href="#!"> <img class="img-fluid"
-                                                           src="{% static 'apps/assets/img/logos/tj-heigh-school.png' %}" alt=""
+                                                           src="{% static 'apps/assets/img/logos/tj-heigh-school.png' %}"
+                                                           alt=""
                                                            width="56"/></a>
                         <div class="flex-1 position-relative ps-3">
                             <h6 class="fs-0 mb-0"><a href="#!">Thomas Jefferson High School for Science and

@@ -69,10 +69,10 @@ login,register,celery,email,updateview,createview, loginview, logoutview
 
 
 TODO
-1. product-detail category boyicha otish
-2. registerda loginrequired
-3. product-detail da discount ni
-4. product summasini uzs otkazish va summani 3talik ajratish
+1. product-detail category boyicha otish -> Ketdi
+2. registerda loginrequired -> endi
+3. product-detail da discount ni -> ketdi
+4. product summasini uzs otkazish va summani 3talik ajratish -> endi
 
 
 n + 1

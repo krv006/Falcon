@@ -17,25 +17,16 @@
                         {% for cart_item in cart_items %}
                             <tr class="border-bottom">
                                 <th class="ps-0 pt-0">{{ cart_item.product.title }} x {{ cart_item.quantity }}
-                                    <div class="text-400 fw-normal fs--2">Z0V20008N: 2.9GHz 6-core 8th-Gen Intel Core
-                                        i9,
-                                        32GB
-                                        RAM
+
+                                    <div class="text-400 fw-normal fs--2">
+                                        {{ cart_item.product.short_description|safe }}
                                     </div>
+
                                 </th>
-                                <th class="pe-0 text-end pt-0">$1345</th>
+                                <th class="pe-0 text-end pt-0">${{ cart_item.product.price }}</th>
                             </tr>
                         {% endfor %}
 
-                        <tr class="border-bottom">
-                            <th class="ps-0">Apple iMac Pro x 1
-                                <div class="text-400 fw-normal fs--2">27-inch with Retina 5K Display, 3.0GHz 10-core
-                                    Intel
-                                    Xeon W, 1TB
-                                </div>
-                            </th>
-                            <th class="pe-0 text-end">$2010</th>
-                        </tr>
                         <tr class="border-bottom">
                             <th class="ps-0">Subtotal</th>
                             <th class="pe-0 text-end">$3355</th>
@@ -46,7 +37,7 @@
                         </tr>
                         <tr class="border-bottom">
                             <th class="ps-0">Shipping</th>
-                            <th class="pe-0 text-end">$20</th>
+                            <th class="pe-0 text-end">${{ cart_items.product.shopping_cost }}</th>
                         </tr>
                         <tr>
                             <th class="ps-0 pb-0">Total</th>
@@ -81,7 +72,10 @@
                                            checked="checked"/>
                                     <label class="form-check-label mb-0 fw-bold d-block"
                                            for="address-1">{{ address.full_name }}<span
-                                            class="radio-select-content"><span>{{ address.street }},<br/>Pensaukee,<br/>{{ address.city}} {{ address.zip_code }}<span
+                                            class="radio-select-content"><span>{{ address.street }},
+{#                                        <br/>Pensaukee,#}
+                                        <br/>
+                                        {{ address.city}} {{ address.zip_code }}<span
                                             class="d-block mb-0 pt-2">
                                         <a href="tel:{{ address.phone|str_to_phone }}">
                                             {{ address.phone|str_to_phone }}

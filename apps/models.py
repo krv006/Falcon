@@ -22,6 +22,7 @@ class Category(MPTTModel):
     slug = SlugField(max_length=255, unique=True, editable=False)
     parent = TreeForeignKey('self', on_delete=CASCADE, null=True, blank=True, related_name='children')
 
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.slug:
             self.slug = slugify(self.name)

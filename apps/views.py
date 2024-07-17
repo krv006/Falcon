@@ -6,8 +6,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-from django.core.cache import cache
-from django.http import JsonResponse, HttpResponseRedirect
+# from django.core.cache import cache
+from django.http import HttpResponseRedirect
 
 from apps.forms import UserRegisterModelForm, OrderCreateModelForm
 from apps.models import Product, Category, Favorite, CartItem, Address, ImageProduct, Order

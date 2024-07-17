@@ -15,7 +15,7 @@ from apps.models import User
 class CategoryMixin:
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context['categories'] = Category.objects.filter()  # TODO Children dib yozish kerak
+        context['categories'] = Category.objects.all()
         return context
 
 

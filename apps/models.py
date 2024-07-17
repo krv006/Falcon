@@ -2,8 +2,9 @@ from datetime import timedelta
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.db.models import Model, JSONField, TextChoices, OneToOneField
+from django.db.models import Model, JSONField, TextChoices, OneToOneField, DateField, CharField, CASCADE, \
+    PositiveIntegerField, ForeignKey, DateTimeField, TextField, EmailField, SlugField, ManyToManyField, DecimalField, \
+    ImageField
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django_ckeditor_5.fields import CKEditor5Field
@@ -16,13 +17,10 @@ class User(AbstractUser):
         return self.cart_items.count()
 
 
-# class CreateBaseModel(Model):
-
-
 class Category(MPTTModel):
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=255, unique=True, editable=False)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    name = CharField(max_length=255, unique=True)
+    slug = SlugField(max_length=255, unique=True, editable=False)
+    parent = TreeForeignKey('self', on_delete=CASCADE, null=True, blank=True, related_name='children')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.slug:
@@ -43,18 +41,18 @@ class Category(MPTTModel):
 
 
 class Product(Model):
-    title = models.CharField(max_length=355)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
-    price_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    shopping_cost = models.DecimalField(default=0, max_digits=7, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=0)
+    title = CharField(max_length=355)
+    price = DecimalField(max_digits=7, decimal_places=2)
+    price_percentage = DecimalField(max_digits=5, decimal_places=2, default=0)
+    shopping_cost = DecimalField(default=0, max_digits=7, decimal_places=2)
+    quantity = PositiveIntegerField(default=0)
     description = JSONField()
     short_description = CKEditor5Field()
     long_description = CKEditor5Field()
-    category = models.ForeignKey('apps.Category', models.CASCADE)
-    tags = models.ManyToManyField('apps.Tag', related_name='tag')
-    updated_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    category = ForeignKey('apps.Category', CASCADE)
+    tags = ManyToManyField('apps.Tag', related_name='tag')
+    updated_at = DateTimeField(auto_now_add=True)
+    created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
@@ -69,13 +67,13 @@ class Product(Model):
 
 
 class ImageProduct(Model):
-    image = models.ImageField(upload_to='products/%Y/%m/%d/')
-    product = models.ForeignKey('apps.Product', models.CASCADE, related_name='images')
+    image = ImageField(upload_to='products/%Y/%m/%d/')
+    product = ForeignKey('apps.Product', CASCADE, related_name='images')
 
 
 class Tag(Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True, editable=False)
+    name = CharField(max_length=255)
+    slug = SlugField(max_length=255, unique=True, editable=False)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.slug:
@@ -90,30 +88,30 @@ class Tag(Model):
 
 
 class Review(Model):
-    name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255, null=True, blank=True)
-    description = models.TextField()
-    comment_status = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    product = models.ForeignKey('apps.Product', models.CASCADE, related_name='reviw')
+    name = CharField(max_length=255)
+    email = EmailField(max_length=255, null=True, blank=True)
+    description = TextField()
+    comment_status = TextField()
+    created_at = DateTimeField(auto_now_add=True)
+    product = ForeignKey('apps.Product', CASCADE, related_name='reviw')
 
     def __str__(self):
         return self.name
 
 
 class Favorite(Model):
-    user = models.ForeignKey(User, models.CASCADE)
-    product = models.ForeignKey('apps.Product', models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = ForeignKey(User, CASCADE)
+    product = ForeignKey('apps.Product', CASCADE)
+    created_at = DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'product')
 
 
 class CartItem(Model):
-    product = models.ForeignKey('apps.Product', models.CASCADE)
-    user = models.ForeignKey('apps.User', models.CASCADE, related_name='cart_items')
-    quantity = models.PositiveIntegerField(default=1)
+    product = ForeignKey('apps.Product', CASCADE)
+    user = ForeignKey('apps.User', CASCADE, related_name='cart_items')
+    quantity = PositiveIntegerField(default=1)
 
     # class Meta:
     #     unique_together = ('user', 'product')
@@ -137,36 +135,36 @@ class Order(Model):
         PAYPAL = 'paypal', 'Paypal'
         CREDIT_CARD = 'credit_card', 'Credit_card'
 
-    status = models.CharField(max_length=255, choices=StatusMethod)
-    payment_method = models.CharField(max_length=255, choices=PaymentMethod)
-    address = models.ForeignKey('apps.Address', models.CASCADE)
-    owner = models.ForeignKey('apps.User', models.CASCADE, related_name='orders')
+    status = CharField(max_length=255, choices=StatusMethod)
+    payment_method = CharField(max_length=255, choices=PaymentMethod)
+    address = ForeignKey('apps.Address', CASCADE)
+    owner = ForeignKey('apps.User', CASCADE, related_name='orders')
 
     def __str__(self):
         return f'Order {self.id} - {self.status}'
 
 
-class Address(models.Model):
-    user = models.ForeignKey('apps.User', models.CASCADE)
-    full_name = models.CharField(max_length=255)
-    street = models.CharField(max_length=255)
-    zip_code = models.PositiveIntegerField()
-    city = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
+class Address(Model):
+    user = ForeignKey('apps.User', CASCADE)
+    full_name = CharField(max_length=255)
+    street = CharField(max_length=255)
+    zip_code = PositiveIntegerField()
+    city = CharField(max_length=255)
+    phone = CharField(max_length=255)
 
 
 class OrderItem(Model):
-    product = models.ForeignKey('apps.Product', models.CASCADE)
-    order = models.ForeignKey('apps.Order', models.CASCADE, related_name='items')
-    quantity = models.PositiveIntegerField(default=0)
+    product = ForeignKey('apps.Product', CASCADE)
+    order = ForeignKey('apps.Order', CASCADE, related_name='items')
+    quantity = PositiveIntegerField(default=0)
 
 
 class CreditCard(Model):
-    order = OneToOneField('apps.Order', models.CASCADE)
-    number = models.CharField(max_length=255)
-    cvv = models.CharField(max_length=255)
-    expire_date = models.DateField()
+    order = OneToOneField('apps.Order', CASCADE)
+    number = CharField(max_length=255)
+    cvv = CharField(max_length=255)
+    expire_date = DateField()
 
 
 class SiteSettings(Model):
-    tax = models.PositiveIntegerField()
+    tax = PositiveIntegerField()

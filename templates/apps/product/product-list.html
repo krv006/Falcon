@@ -87,9 +87,7 @@
                                             </a>
                                         </h5>
                                         <p class="fs--1 mb-2 mb-md-3">
-                                            <a class="text-500" href="{% url 'product_list_page' %}?category={{ product.category.slug }}">{{ product.category }}>
-                                                {{ product.category.name }}
-                                            </a>
+                                            <a class="text-500" href="{% url 'product_list_page' %}?category={{ product.category.slug }}">{{ product.category }}</a>
                                         </p>
                                         <ul class="list-unstyled d-none d-lg-block">
                                             {% if product.description.items %}

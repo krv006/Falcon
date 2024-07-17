@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header bg-light btn-reveal-trigger d-flex flex-between-center">
                     <h5 class="mb-0">Order Summary</h5><a class="btn btn-link btn-sm btn-reveal text-600"
-                                                          href="../../app/e-commerce/shopping-cart.html"><span
+                                                          href="{% url 'shopping_cart_page' %}"><span
                         class="fas fa-pencil-alt"></span></a>
                 </div>
                 <div class="card-body">
@@ -21,16 +21,18 @@
                                     <div class="text-400 fw-normal fs--2">
                                         {{ cart_item.product.short_description|safe }}
                                     </div>
-
                                 </th>
+
                                 <th class="pe-0 text-end pt-0">${{ cart_item.product.price }}</th>
                             </tr>
                         {% endfor %}
 
                         <tr class="border-bottom">
                             <th class="ps-0">Subtotal</th>
-                            <th class="pe-0 text-end">$3355</th>
+                            <th class="pe-0 text-end">${{ cart_item.amount }}</th>
                         </tr>
+
+
                         <tr class="border-bottom">
                             <th class="ps-0">Coupon: <span class="text-success">40SITEWIDE</span></th>
                             <th class="pe-0 text-end">-$55</th>
@@ -75,8 +77,8 @@
                                             class="radio-select-content"><span>{{ address.street }},
 {#                                        <br/>Pensaukee,#}
                                         <br/>
-                                        {{ address.city}} {{ address.zip_code }}<span
-                                            class="d-block mb-0 pt-2">
+                                        {{ address.city }} {{ address.zip_code }}<span
+                                                class="d-block mb-0 pt-2">
                                         <a href="tel:{{ address.phone|str_to_phone }}">
                                             {{ address.phone|str_to_phone }}
                                             </a>

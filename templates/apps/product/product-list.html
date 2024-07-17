@@ -1,6 +1,8 @@
 {% extends 'apps/base.html' %}
 {% load static %}
 
+{% load custom_tags %}
+
 {% block title %}
     Product list
 {% endblock %}
@@ -87,7 +89,8 @@
                                             </a>
                                         </h5>
                                         <p class="fs--1 mb-2 mb-md-3">
-                                            <a class="text-500" href="{% url 'product_list_page' %}?category={{ product.category.slug }}">{{ product.category }}</a>
+                                            <a class="text-500"
+                                               href="{% url 'product_list_page' %}?category={{ product.category.slug }}">{{ product.category }}</a>
                                         </p>
                                         <ul class="list-unstyled d-none d-lg-block">
                                             {% if product.description.items %}
@@ -138,16 +141,20 @@
                                             </div>
                                         </div>
                                         <div class="mt-2">
-{#                                            <a class="btn btn-sm btn-outline-secondary border-300 d-lg-block me-2 me-lg-0"#}
-{#                                               href="{% url 'addfavourites_page' product.pk %}">#}
-{#                                                <span class="far fa-heart"></span>#}
-{#                                                <span class="ms-2 d-none d-md-inline-block">Favourite</span>#}
-{#                                            </a>#}
+                                            <a class="btn btn-sm btn{% if not user|is_liked:product %}-outline{% endif %}-danger border-300"
+                                               href="{% url 'add_favorite' product.id %}"
+                                               data-bs-toggle="tooltip" data-bs-placement="top"
+                                               title="Add to Wish List">
+                                                <span class="far fa-heart me-1"></span>
+                                                {{ product.favorite_set.count }}
+                                            </a>
+                                        
                                             <a class="btn btn-sm btn-primary d-lg-block mt-lg-2"
                                                href="{% url 'add_cart_page' product.pk %}">
                                                 <span class="fas fa-cart-plus"> </span>
                                                 <span class="ms-2 d-none d-md-inline-block">Add to Cart</span>
                                             </a>
+                                        
                                         </div>
                                     </div>
                                 </div>

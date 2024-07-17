@@ -1,8 +1,9 @@
 from django.contrib.auth.views import LoginView
 from django.urls import path
 from .views import ProductListView, ProductDetailTemplateView, RegisterCreateView, \
-    SettingsUpdateView, FavouriteView, CartListView, CartItemDeleteView, AddToCartView, CustomLogoutView, CheckoutListView, \
-    AddressCreateView, AddressUpdateView
+    SettingsUpdateView, FavouriteView, CartListView, CartItemDeleteView, AddToCartView, CustomLogoutView, \
+    CheckoutListView, \
+    AddressCreateView, AddressUpdateView, OrderCreateView
 
 urlpatterns = [
     # path('rv/', ProductLIstTemplateView.as_view(), name='product_list'),
@@ -28,5 +29,6 @@ urlpatterns = [
 
     path('addres-create', AddressCreateView.as_view(), name='address_page'),
     path('address-update/<int:pk>/', AddressUpdateView.as_view(), name='update_address'),
+    path('order-create/', OrderCreateView.as_view(), name='order_create'),
 
 ]

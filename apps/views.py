@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.core.cache import cache
+from django.http import JsonResponse, HttpResponseRedirect
 
 from apps.forms import UserRegisterModelForm, OrderCreateModelForm
 from apps.models import Product, Category, Favorite, CartItem, Address, ImageProduct, Order
@@ -28,10 +29,10 @@ class ProductListView(CategoryMixin, ListView):
 
     def get_queryset(self):
 
-        if cache.get('product_list'):
-            return cache.get('product_list')
+        # if cache.get('product_list'):
+        #     return cache.get('product_list')
         qs = super().get_queryset()
-        cache.set('product_list', qs, timeout=7200)
+        # cache.set('product_list', qs, timeout=7200)
 
         category_slug = self.request.GET.get('category')
         if category_slug:
@@ -65,6 +66,14 @@ class RegisterCreateView(CreateView):
     def form_invalid(self, form):
         return super().form_invalid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            redirect_to = reverse_lazy('product_list_page')
+            if redirect_to == self.request.path:
+                raise ValueError()
+            return HttpResponseRedirect(redirect_to)
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SettingsUpdateView(CategoryMixin, LoginRequiredMixin, UpdateView):
     queryset = User.objects.all()
@@ -83,7 +92,11 @@ class FavouriteView(View):
         obj, created = Favorite.objects.get_or_create(user=request.user, product_id=pk)
         if not created:
             obj.delete()
-        return redirect('product_detail', pk=pk)
+        referer = request.META.get('HTTP_REFERER')
+        if referer:
+            return redirect(referer)
+        else:
+            return redirect('product_detail', pk=pk)
 
 
 class AddToCartView(LoginRequiredMixin, View):
@@ -139,8 +152,7 @@ class AddressCreateView(CategoryMixin, CreateView):
     model = Address
     template_name = 'apps/address/address_create.html'
     fields = 'full_name', 'phone', 'city', 'street', 'zip_code'
-    context_object_name = 'create_address'
-    success_url = reverse_lazy('shopping_cart_page')
+    success_url = reverse_lazy('checkout_page')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -150,7 +162,7 @@ class AddressCreateView(CategoryMixin, CreateView):
 class AddressUpdateView(CategoryMixin, UpdateView):
     model = Address
     template_name = 'apps/address/edit.html'
-    fields = ['city', 'street', 'zip_code', 'phone']
+    fields = 'city', 'street', 'zip_code', 'phone'
     success_url = reverse_lazy('checkout_page')
 
 
@@ -210,7 +222,7 @@ class OrderListView(CategoryMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         if not (self.request.user.is_staff or self.request.user.is_superuser):
-            return redirect('list_view')
+            return redirect('product_list_page')
         return super().get(request, *args, **kwargs)
 
 
@@ -230,11 +242,10 @@ class OrderDeleteView(DeleteView):
 
 class OrderCreateView(LoginRequiredMixin, CategoryMixin, CreateView):
     model = Order
-    template_name = 'apps/shop/checkout.html'
+    template_name = 'apps/order/order-list.html'
     form_class = OrderCreateModelForm
     success_url = reverse_lazy('orders_list')
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super().form_valid(form)
-

@@ -12,9 +12,10 @@
                                                           href="{% url 'shopping_cart_page' %}"><span
                         class="fas fa-pencil-alt"></span></a>
                 </div>
-                <div class="card-body">
-                    <table class="table table-borderless fs--1 mb-0">
-                        {% for cart_item in cart_items %}
+
+                {% for cart_item in cart_items %}
+                    <div class="card-body">
+                        <table class="table table-borderless fs--1 mb-0">
                             <tr class="border-bottom">
                                 <th class="ps-0 pt-0">{{ cart_item.product.title }} x {{ cart_item.quantity }}
 
@@ -23,34 +24,31 @@
                                     </div>
                                 </th>
 
-                                <th class="pe-0 text-end pt-0">${{ cart_item.product.price }}</th>
+                                <th class="pe-0 text-end pt-0">${{ cart_item.amount }}</th>
                             </tr>
-                        {% endfor %}
+                            <tr class="border-bottom">
+                                <th class="ps-0">Subtotal</th>
+                                <th class="pe-0 text-end">${{ cart_item.amount }}</th>
+                            </tr>
+                {% endfor %}
+                            <tr class="border-bottom">
+                                <th class="ps-0">Shipping</th>
+                                <th class="pe-0 text-end">${{ sub_shipping_cost }}</th>
+                            </tr>
+                            <tr>
+                                <th class="ps-0 pb-0">Total</th>
+                                <th class="pe-0 text-end pb-0">${{ all_total }}</th>
+                            </tr>
 
-                        <tr class="border-bottom">
-                            <th class="ps-0">Subtotal</th>
-                            <th class="pe-0 text-end">${{ cart_item.amount }}</th>
-                        </tr>
+
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between bg-light">
+                        <div class="fw-semi-bold">Payable Total</div>
+                        <div class="fw-bold">${{ all_total }}</div>
+                    </div>
 
 
-                        <tr class="border-bottom">
-                            <th class="ps-0">Coupon: <span class="text-success">40SITEWIDE</span></th>
-                            <th class="pe-0 text-end">-$55</th>
-                        </tr>
-                        <tr class="border-bottom">
-                            <th class="ps-0">Shipping</th>
-                            <th class="pe-0 text-end">${{ cart_items.product.shopping_cost }}</th>
-                        </tr>
-                        <tr>
-                            <th class="ps-0 pb-0">Total</th>
-                            <th class="pe-0 text-end pb-0">$3320</th>
-                        </tr>
-                    </table>
-                </div>
-                <div class="card-footer d-flex justify-content-between bg-light">
-                    <div class="fw-semi-bold">Payable Total</div>
-                    <div class="fw-bold">$3320</div>
-                </div>
             </div>
         </div>
         <div class="col-xl-8">
@@ -84,7 +82,7 @@
                                             </a>
                                     </span></span></span></label><a
                                         {#                                    class="fs--1" href="{% url 'update_address' address.pk %}">Edit</a>#}
-                                        class="fs--1" href="{% url 'update_address' 1 %}">Edit</a>
+                                        class="fs--1" href="{% url 'update_address' address.pk %}">Edit</a>
                                 </div>
                             </div>
                         {% endfor %}
@@ -93,11 +91,17 @@
                 </div>
             </div>
             <div class="card">
+
+
                 <div class="card-header bg-light">
                     <h5 class="mb-0">Payment Method</h5>
                 </div>
+
+
                 <div class="card-body">
-                    <form>
+
+                    <form method="post" action="#">
+                        {% csrf_token %}
                         <div class="form-check mb-0">
                             <input class="form-check-input" type="radio" value="" id="credit-card" checked="checked"
                                    name="payment-method"/>
@@ -172,17 +176,29 @@
                                 </div>
                                 <div class="vertical-line d-none d-md-block d-xl-none d-xxl-block"></div>
                             </div>
+
+
                             <div class="col-md-5 col-xl-12 col-xxl-5 ps-lg-4 ps-xl-2 ps-xxl-5 text-center text-md-start text-xl-center text-xxl-start">
                                 <div class="border-dashed-bottom d-block d-md-none d-xl-block d-xxl-none my-4"></div>
-                                <div class="fs-2 fw-semi-bold">All Total: <span class="text-primary">$3320</span></div>
+                                <div class="fs-2 fw-semi-bold">All Total:
+                                    <span class="text-primary">${{ all_total }}</span>
+                                </div>
                                 <button class="btn btn-success mt-3 px-5" type="submit">Confirm &amp; Pay</button>
-                                <p class="fs--1 mt-3 mb-0">By clicking <strong>Confirm & Pay </strong>button you agree
-                                    to
-                                    the <a href="#!">Terms &amp; Conditions</a></p>
+                                <p class="fs--1 mt-3 mb-0">By clicking
+                                    <strong>Confirm & Pay </strong>
+                                    button you agree to the
+                                    <a href="#!">Terms &amp; Conditions</a>
+                                </p>
                             </div>
+
+
                         </div>
                     </form>
+
+
                 </div>
+
+
             </div>
         </div>
     </div>

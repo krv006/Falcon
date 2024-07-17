@@ -70,9 +70,9 @@ login,register,celery,email,updateview,createview, loginview, logoutview
 
 TODO
 1. product-detail category boyicha otish -> Ketdi
-2. registerda loginrequired -> endi
+2. registerda loginrequired -> ketdi
 3. product-detail da discount ni -> ketdi
-4. product summasini uzs otkazish va summani 3talik ajratish -> endi
+4. product summasini uzs otkazish va summani 3 talik ajratish -> endi
 
 
 n + 1
@@ -93,3 +93,9 @@ magazinga qilinadgan planlarda shuni xam olib qoyish kerak
 
 TODO
 mptt category qilish kerak togirlab
+
+
+TODO
+CUSTOMER da super user yokida ishchi uchun korinishi kerak faqat
+
+ctrl shift 6 bn qilinsa

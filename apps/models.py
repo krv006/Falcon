@@ -22,7 +22,6 @@ class Category(MPTTModel):
     slug = SlugField(max_length=255, unique=True, editable=False)
     parent = TreeForeignKey('self', on_delete=CASCADE, null=True, blank=True, related_name='children')
 
-
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -123,6 +122,10 @@ class CartItem(Model):
     @property
     def amount(self):
         return self.quantity * self.product.new_price
+
+    @property
+    def total(self):
+        return self.amount - self.product.shopping_cost
 
 
 class Order(Model):

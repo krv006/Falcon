@@ -1,14 +1,15 @@
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F, Sum, Q, Prefetch
+from django.forms import ModelForm
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.core.cache import cache
 
-from apps.forms import UserRegisterModelForm
-from apps.models import Product, Category, Favorite, CartItem, Address, ImageProduct
+from apps.forms import UserRegisterModelForm, OrderCreateModelForm
+from apps.models import Product, Category, Favorite, CartItem, Address, ImageProduct, Order
 from apps.models import User
 
 
@@ -124,9 +125,14 @@ class CartListView(CategoryMixin, ListView):
         return ctx
 
 
-class CartItemDeleteView(DeleteView):
-    model = CartItem
-    success_url = reverse_lazy('shopping_cart_page')  # TODO togirlash kk delete ni
+class CartItemDeleteView(LoginRequiredMixin, View):
+    success_url = reverse_lazy('shopping_cart_page')
+
+    def get(self, request, pk, *args, **kwargs):
+        cart_item = CartItem.objects.filter(user=self.request.user, pk=pk).first()
+        if cart_item:
+            cart_item.delete()
+        return redirect(self.success_url)
 
 
 class AddressCreateView(CategoryMixin, CreateView):
@@ -153,6 +159,20 @@ class CheckoutListView(LoginRequiredMixin, CategoryMixin, ListView):
     template_name = 'apps/shop/checkout.html'
     context_object_name = 'cart_items'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        qs = self.get_queryset()
+
+        context.update(
+            **qs.aggregate(
+                sub_total=Sum(F('quantity') * F('product__price') * (100 - F('product__price_percentage')) / 100),
+                sub_shipping_cost=Sum(F('product__shopping_cost')),
+                all_total=Sum((F('quantity') * F('product__price') * (100 - F('product__price_percentage')) / 100) + F(
+                    'product__shopping_cost'))
+            )
+        )
+        return context
+
     def get_queryset(self):
         return super().get_queryset().filter(user=self.request.user)
 
@@ -165,3 +185,55 @@ class CustomSettings(LoginRequiredMixin, CategoryMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+#
+# class OrderCreateView(ModelForm):
+#     model = Order
+#     # template_name =
+#     # form_class = OrderCreateForm
+#     success_url = reverse_lazy('product_detail')
+#
+#     class Meta:
+#         model = Order
+#         fields = 'status', 'payment_method', 'address'
+#
+#
+# class OrderDetails(CategoryMixin, ListView):
+#     ...
+
+class OrderListView(CategoryMixin, ListView):
+    model = Order
+    template_name = 'apps/order/order-detail.html'
+    context_object_name = 'orders'
+    paginate_by = 10
+
+    def get(self, request, *args, **kwargs):
+        if not (self.request.user.is_staff or self.request.user.is_superuser):
+            return redirect('list_view')
+        return super().get(request, *args, **kwargs)
+
+
+class OrderDetailView(CategoryMixin, DetailView):
+    model = Order
+    template_name = 'apps/order/order-detail.html'
+    context_object_name = 'order'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(owner=self.request.user)
+
+
+class OrderDeleteView(DeleteView):
+    model = Order
+    success_url = reverse_lazy('orders_list')
+
+
+class OrderCreateView(LoginRequiredMixin, CategoryMixin, CreateView):
+    model = Order
+    template_name = 'apps/shop/checkout.html'
+    form_class = OrderCreateModelForm
+    success_url = reverse_lazy('orders_list')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)

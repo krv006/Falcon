@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField
-from apps.models import User
+from django.forms import ModelForm, CharField, ModelChoiceField
+from apps.models import User, Address, Order, CreditCard
 
 
 class UserRegisterModelForm(ModelForm):
@@ -23,3 +23,24 @@ class UserRegisterModelForm(ModelForm):
         user.save()
         return user
 
+
+class OrderCreateModelForm(ModelForm):
+    address = ModelChoiceField(queryset=Address.objects.all())
+    owner = ModelChoiceField(queryset=User.objects.all(), required=False)
+
+    class Meta:
+        model = Order
+        fields = 'payment_method', 'address', 'owner'
+
+    def save(self, commit=True):
+        obj: Order = super().save(commit)
+
+        if commit and obj.payment_method == 'credit_card':
+            # cvv = self.data.pop('cvv')
+            # expire_date = self.data.pop('expire_date')
+            # number = self.data.pop('number')
+            CreditCard.objects.create(
+                owner=obj.owner,
+                order=obj
+            )
+        return obj

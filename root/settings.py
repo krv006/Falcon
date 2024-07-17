@@ -33,8 +33,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     "debug_toolbar",
-    'mppt',
-
+    'mptt',
 ]
 
 MIDDLEWARE = [
@@ -252,13 +251,13 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'django-db'
 
 CELERY_CACHE_BACKEND = 'default'
-
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
-    }
-}
+#
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379",
+#     }
+# }
 
 LOGGING = {
     'version': 1,

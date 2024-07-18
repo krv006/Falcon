@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, ModelChoiceField
-from apps.models import User, Address, Order, CreditCard
+from apps.models import User, Address, Order, CreditCard, OrderItem, CartItem
+
+from datetime import datetime
 
 
 class UserRegisterModelForm(ModelForm):
@@ -36,11 +38,21 @@ class OrderCreateModelForm(ModelForm):
         obj: Order = super().save(commit)
 
         if commit and obj.payment_method == 'credit_card':
-            # cvv = self.data.pop('cvv')
-            # expire_date = self.data.pop('expire_date')
-            # number = self.data.pop('number')
+            cvv = self.data.get('cvv')
+            month, year = map(int, self.data.get('expire_date').split('/'))
+            expire_date = datetime(year + 2000, month, 1).date()
+            number = self.data.get('number')
             CreditCard.objects.create(
                 owner=obj.owner,
-                order=obj
+                order=obj,
+                cvv=cvv,
+                expire_date=expire_date,
+                number=number
             )
+
+        for cart_item in obj.owner.cart_items.all():
+            OrderItem.objects.create(order=obj,
+                                     quantity=cart_item.quantity,
+                                     product=cart_item.product)
+        CartItem.objects.filter(user=obj.owner).delete()
         return obj

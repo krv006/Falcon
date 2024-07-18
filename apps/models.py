@@ -2,13 +2,21 @@ from datetime import timedelta
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
-from django.db.models import Model, JSONField, TextChoices, OneToOneField, DateField, CharField, CASCADE, \
+from django.db.models import Model, JSONField, TextChoices, DateField, CharField, CASCADE, \
     PositiveIntegerField, ForeignKey, DateTimeField, TextField, EmailField, SlugField, ManyToManyField, DecimalField, \
-    ImageField
+    ImageField, IntegerField
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
+
+
+class CreatedBaseModel(Model):
+    updated_at = DateTimeField(auto_now=True)
+    created_at = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
 
 
 class User(AbstractUser):
@@ -87,16 +95,23 @@ class Tag(Model):
         super().save(force_insert, force_update, using, update_fields)
 
 
-class Review(Model):
-    name = CharField(max_length=255)
-    email = EmailField(max_length=255, null=True, blank=True)
-    description = TextField()
-    comment_status = TextField()
-    created_at = DateTimeField(auto_now_add=True)
-    product = ForeignKey('apps.Product', CASCADE, related_name='reviw')
+class Review(CreatedBaseModel):
+    RATING = (
+        (1, '★☆☆☆☆'),
+        (2, '★★☆☆☆'),
+        (3, '★★★☆☆'),
+        (4, '★★★★☆'),
+        (5, '★★★★★'),
+    )
 
-    def __str__(self):
-        return self.name
+    name = CharField(max_length=255)
+    review_text = TextField()
+    email_address = EmailField()
+    product = ForeignKey('apps.Product', CASCADE, related_name='product_review')
+    rating = IntegerField(choices=RATING)
+    user = ForeignKey('apps.User', CASCADE, related_name='user_review')
+
+
 
 
 class Favorite(Model):
@@ -113,9 +128,6 @@ class CartItem(Model):
     user = ForeignKey('apps.User', CASCADE, related_name='cart_items')
     quantity = PositiveIntegerField(default=1)
 
-    # class Meta:
-    #     unique_together = ('user', 'product')
-    #
     def __str__(self):
         return f"{self.quantity} x {self.product.title}"
 
@@ -164,10 +176,11 @@ class OrderItem(Model):
 
 
 class CreditCard(Model):
-    order = OneToOneField('apps.Order', CASCADE)
+    order = ForeignKey('apps.Order', CASCADE)
     number = CharField(max_length=255)
     cvv = CharField(max_length=255)
     expire_date = DateField()
+    owner = ForeignKey('apps.User', CASCADE)
 
 
 class SiteSettings(Model):

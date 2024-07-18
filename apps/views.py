@@ -199,31 +199,16 @@ class CustomSettings(LoginRequiredMixin, CategoryMixin, UpdateView):
         return self.request.user
 
 
-#
-# class OrderCreateView(ModelForm):
-#     model = Order
-#     # template_name =
-#     # form_class = OrderCreateForm
-#     success_url = reverse_lazy('product_detail')
-#
-#     class Meta:
-#         model = Order
-#         fields = 'status', 'payment_method', 'address'
-#
-#
-# class OrderDetails(CategoryMixin, ListView):
-#     ...
-
 class OrderListView(CategoryMixin, ListView):
     model = Order
-    template_name = 'apps/order/order-detail.html'
+    template_name = 'apps/order/order-list.html'
     context_object_name = 'orders'
     paginate_by = 10
 
-    def get(self, request, *args, **kwargs):
-        if not (self.request.user.is_staff or self.request.user.is_superuser):
-            return redirect('product_list_page')
-        return super().get(request, *args, **kwargs)
+    def get_queryset(self):
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return super().get_queryset()
+        return super().get_queryset().filter(owner=self.request.user)
 
 
 class OrderDetailView(CategoryMixin, DetailView):
@@ -232,6 +217,8 @@ class OrderDetailView(CategoryMixin, DetailView):
     context_object_name = 'order'
 
     def get_queryset(self):
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return super().get_queryset()
         return super().get_queryset().filter(owner=self.request.user)
 
 
@@ -249,3 +236,6 @@ class OrderCreateView(LoginRequiredMixin, CategoryMixin, CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)

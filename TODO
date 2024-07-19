@@ -24,6 +24,7 @@ CRUD
 
 
 
+
 mptt, ckeditor, import-export, jazzmin
 class based view
 

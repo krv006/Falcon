@@ -11,12 +11,12 @@ from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
 
 
-class CreatedBaseModel(Model):
-    updated_at = DateTimeField(auto_now=True)
-    created_at = DateTimeField(auto_now_add=True)
-
-    class Meta:
-        abstract = True
+# class CreatedBaseModel(Model):
+#     updated_at = DateTimeField(auto_now=True)
+#     created_at = DateTimeField(auto_now_add=True)
+#
+#     class Meta:
+#         abstract = True
 
 
 class User(AbstractUser):
@@ -95,23 +95,16 @@ class Tag(Model):
         super().save(force_insert, force_update, using, update_fields)
 
 
-class Review(CreatedBaseModel):
-    RATING = (
-        (1, '★☆☆☆☆'),
-        (2, '★★☆☆☆'),
-        (3, '★★★☆☆'),
-        (4, '★★★★☆'),
-        (5, '★★★★★'),
-    )
-
+class Review(Model):
     name = CharField(max_length=255)
-    review_text = TextField()
-    email_address = EmailField()
-    product = ForeignKey('apps.Product', CASCADE, related_name='product_review')
-    rating = IntegerField(choices=RATING)
-    user = ForeignKey('apps.User', CASCADE, related_name='user_review')
+    email = EmailField(max_length=255, null=True, blank=True)
+    description = TextField()
+    comment_status = TextField()
+    created_at = DateTimeField(auto_now_add=True)
+    product = ForeignKey('apps.Product', CASCADE, related_name='reviw')
 
-
+    def __str__(self):
+        return self.name
 
 
 class Favorite(Model):
@@ -155,6 +148,7 @@ class Order(Model):
     payment_method = CharField(max_length=255, choices=PaymentMethod)
     address = ForeignKey('apps.Address', CASCADE)
     owner = ForeignKey('apps.User', CASCADE, related_name='orders')
+    created_at = DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Order {self.id} - {self.status}'

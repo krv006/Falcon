@@ -1,16 +1,15 @@
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import F, Sum, Q, Prefetch
-from django.forms import ModelForm
+from django.db.models import F, Sum, Q
+# from django.core.cache import cache
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
-# from django.core.cache import cache
-from django.http import HttpResponseRedirect
 
 from apps.forms import UserRegisterModelForm, OrderCreateModelForm
-from apps.models import Product, Category, Favorite, CartItem, Address, ImageProduct, Order
+from apps.models import Product, Category, Favorite, CartItem, Address, Order
 from apps.models import User
 
 
@@ -85,7 +84,7 @@ class SettingsUpdateView(CategoryMixin, LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class FavouriteView(View):
+class FavouriteView(LoginRequiredMixin, View):
     template_name = 'apps/shop/favourite.html'
 
     def get(self, request, pk, *args, **kwargs):

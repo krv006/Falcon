@@ -27,7 +27,7 @@ urlpatterns = [
 
     path('checkout', CheckoutListView.as_view(), name='checkout_page'),
 
-    path('addres-create', AddressCreateView.as_view(), name='address_page'),
+    path('addres-create', AddressCreateView.as_view(), name='create_address'),
     path('address-update/<int:pk>/', AddressUpdateView.as_view(), name='update_address'),
 
     path('orders', OrderListView.as_view(), name='orders_list'),

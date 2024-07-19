@@ -68,15 +68,14 @@
                                     href="{% url 'order' order.pk %}">
                                 {% if user.is_superuser or user.is_staff %}
                                     <strong>#{{ order.pk }}</strong></a>
-                                    by {{ order.owner.get_full_name }}
+                                    by {{ order.address.full_name }}
                                 {% endif %}
                                 <strong>{{ order.owner.get_full_name }}</strong><br/><a
                                         href="mailto:{{ order.owner.email }}">{{ order.owner.email }}</a>
                             </td>
                             <td class="date py-2 align-middle">{{ order.created_at|date:"d/m/Y" }}</td>
-                            <td class="address py-2 align-middle white-space-nowrap">{{ order.address.full_name }}, {{ order.address.city }},
-                                {{ order.address.street }}, {{ order.address.zip_code }}
-                                <p class="mb-0 text-500">Via Flat Rate</p>
+                            <td class="address py-2 align-middle white-space-nowrap">{{ order.address.full_name }}, {{ order.address.city }}
+                                <p class="mb-0 text-500"> {{ order.address.street }}, {{ order.address.zip_code }}</p>
                             </td>
                             {% if order.status == 'Completed' %}
                                 <td class="status py-2 align-middle text-center fs-0 white-space-nowrap"><span
@@ -102,7 +101,7 @@
                                         data-fa-transform="shrink-2"></span></span>
                                 </td>
                             {% endif %}
-                            <td class="amount py-2 align-middle text-end fs-0 fw-medium">$99</td>
+                            <td class="amount py-2 align-middle text-end fs-0 fw-medium">${{ order. }}</td>
                             <td class="py-2 align-middle white-space-nowrap text-end">
                                 <div class="dropdown font-sans-serif position-static">
                                     <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal"

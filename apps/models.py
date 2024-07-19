@@ -4,7 +4,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Model, JSONField, TextChoices, DateField, CharField, CASCADE, \
     PositiveIntegerField, ForeignKey, DateTimeField, TextField, EmailField, SlugField, ManyToManyField, DecimalField, \
-    ImageField, IntegerField
+    ImageField, IntegerField, BooleanField
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django_ckeditor_5.fields import CKEditor5Field
@@ -20,6 +20,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 
 class User(AbstractUser):
+    has_premium = BooleanField(default=False)
+
     @property
     def cart_count(self):
         return self.cart_items.count()
@@ -61,6 +63,7 @@ class Product(Model):
     tags = ManyToManyField('apps.Tag', related_name='tag')
     updated_at = DateTimeField(auto_now_add=True)
     created_at = DateTimeField(auto_now_add=True)
+    is_premium = BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -72,6 +75,10 @@ class Product(Model):
     @property
     def is_new(self) -> bool:
         return self.created_at >= now() - timedelta(days=7)
+
+    @property
+    def sub_amount(self):
+        return self.price * self.quantity
 
 
 class ImageProduct(Model):
@@ -165,8 +172,12 @@ class Address(Model):
 
 class OrderItem(Model):
     product = ForeignKey('apps.Product', CASCADE)
-    order = ForeignKey('apps.Order', CASCADE, related_name='items')
+    order = ForeignKey('apps.Order', CASCADE, related_name='order_items')
     quantity = PositiveIntegerField(default=0)
+
+    @property
+    def sub_amount(self):
+        return self.quantity * self.product.new_price
 
 
 class CreditCard(Model):

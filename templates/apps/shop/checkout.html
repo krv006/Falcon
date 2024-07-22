@@ -37,9 +37,15 @@
                         </tr>
                     {% endfor %}
                     <tr class="border-bottom">
+                        <th class="ps-0">Tax {{ tax }}</th>
+{#                        <th class="pe-0 text-end">${{ sub_shipping_cost }}</th>#}
+                    </tr>
+
+                    <tr class="border-bottom">
                         <th class="ps-0">Shipping</th>
                         <th class="pe-0 text-end">${{ sub_shipping_cost }}</th>
                     </tr>
+
                     <tr>
                         <th class="ps-0 pb-0">Total</th>
                         <th class="pe-0 text-end pb-0">${{ all_total|intcomma }}</th>

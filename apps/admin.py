@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from mptt.admin import DraggableMPTTAdmin
 
-from apps.models import ImageProduct, Product, Category, Tag, Review, Address
+from apps.models import ImageProduct, Product, Category, Tag, Review, Address, SiteSettings
 from import_export.admin import ImportExportModelAdmin
 
 from .models import User
@@ -57,4 +57,9 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
     pass

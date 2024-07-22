@@ -197,3 +197,4 @@ class SiteSettings(Model):
 
     # TODO opshiy summadan tax di ovolish kerak nechi foiz bolsa foizda qilib
     # TODO pdf file di order ichiga saqlash kerak boladi pdf_field = order.pdf
+

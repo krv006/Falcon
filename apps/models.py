@@ -159,7 +159,6 @@ class Order(Model):
     created_at = DateTimeField(auto_now_add=True)
     pdf_file = FileField(upload_to='order/pdf/', null=True, blank=True)
 
-
     def __str__(self):
         return f'Order {self.id} - {self.status}'
 
@@ -173,7 +172,7 @@ class Order(Model):
         )
 
         subtotal = aggregated['subtotal'] or Decimal('0')
-        tax = subtotal * Decimal('0.05')
+        tax = subtotal * Decimal('0.10')
         total = subtotal + tax
 
         return {

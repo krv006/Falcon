@@ -1,5 +1,4 @@
 import os.path
-import shutil
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
@@ -10,8 +9,8 @@ from root.settings import MEDIA_ROOT
 
 
 def make_pdf(order: Order):
-    data = order.order_items.values_list('product__name', 'quantity', 'product__discount', 'product__price',
-                                         'product__shipping_cost')
+    data = order.order_items.values_list('product__title', 'quantity', 'product__price_percentage', 'product__price',
+                                         'product__shopping_cost')
 
     # Create a canvas object
     pdf_file_folder = 'order/pdf'
@@ -33,31 +32,33 @@ def make_pdf(order: Order):
     x_offset = 50
     y_offset = height - 100
     line_height = 25
+    col_widths = [50, 200, 100, 100, 100]  # Define column widths
 
-    # Draw table headers with background color
-    headers = ['ID', 'Product name', 'Quantity', 'Price', 'Amount']
+    # Draw table headers with background color and borders
+    headers = ['ID', 'Product title', 'Quantity', 'Price', 'Amount']
     c.setFillColor(colors.lightblue)
-    c.rect(x_offset, y_offset, width - 2 * x_offset, line_height, fill=1)
+    c.rect(x_offset, y_offset, sum(col_widths), line_height, fill=1)
     c.setFillColor(colors.black)
     c.setFont("Helvetica-Bold", 12)
+
+    x = x_offset
     for i, header in enumerate(headers):
-        if i == 1:
-            c.drawString(x_offset + i * 95, y_offset + 5, header)
-        else:
-            c.drawString(x_offset + i * 95, y_offset + 5, header)
+        c.drawString(x + 5, y_offset + 5, header)
+        c.rect(x, y_offset, col_widths[i], line_height, fill=0)
+        x += col_widths[i]
 
     total_price = 0
     total_shipping_cost = 0
     c.setFont("Helvetica", 12)
     y_offset -= line_height
 
-    # Draw table rows with alternating colors
+    # Draw table rows with alternating colors and borders
     for index, row in enumerate(data, 1):
         row = list(row)
         discount = row.pop(2)
         row_color = colors.whitesmoke if index % 2 == 0 else colors.lightgrey
         c.setFillColor(row_color)
-        c.rect(x_offset, y_offset, width - 2 * x_offset, line_height, fill=1)
+        c.rect(x_offset, y_offset, sum(col_widths), line_height, fill=1)
         c.setFillColor(colors.black)
 
         product_name, quantity, price, shipping_cost = row
@@ -66,8 +67,13 @@ def make_pdf(order: Order):
         total_price += subtotal
         total_shipping_cost += shipping_cost
 
-        for i, item in enumerate([index, product_name, quantity, f"{price} $", f"{subtotal} $"]):
-            c.drawString(x_offset + i * 95, y_offset + 5, str(item))
+        row_data = [index, product_name, quantity, f"{price} $", f"{subtotal} $"]
+        x = x_offset
+        for i, item in enumerate(row_data):
+            c.drawString(x + 5, y_offset + 5, str(item))
+            c.rect(x, y_offset, col_widths[i], line_height, fill=0)
+            x += col_widths[i]
+
         y_offset -= line_height
 
     y_offset -= line_height

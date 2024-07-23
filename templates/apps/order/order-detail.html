@@ -58,32 +58,32 @@
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <h5 class="mb-3 fs-0">Payment Method</h5>
-                    <div class="d-flex"><img class="me-3" src="{% static 'apps/assets/img/icons/visa.png' %}" width="40"
-                                             height="30"
-                                             alt=""/>
+                    <div class="d-flex">
+                        <img class="me-3" src="{% static 'apps/assets/img/icons/visa.png' %}" width="40" height="30"
+                             alt=""/>
                         <div class="flex-1">
                             <h6 class="mb-0">{{ order.address.full_name }}</h6>
                             <p class="mb-0 fs--1">{{ order.creditcard_set.number }}</p>
                         </div>
-                        <div class="col-auto">
-                        <a href="{% url 'download_pdf' order.pk %}" target="_blank">
-                            <button class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button">
-                                <svg class="svg-inline--fa fa-arrow-down fa-w-14 me-1" aria-hidden="true"
-                                     focusable="false"
-                                     data-prefix="fas" data-icon="arrow-down" role="img"
-                                     xmlns="http://www.w3.org/2000/svg"
-                                     viewBox="0 0 448 512" data-fa-i2svg="">
-                                    <path fill="currentColor"
-                                          d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"></path>
-                                </svg>
-                                <!-- <span class="fas fa-arrow-down me-1"> </span> Font Awesome fontawesome.com -->
-                                Download (.pdf)
-                            </button>
                     </div>
+                </div>
+                <div class="col-auto">
+                    <a href="{% url 'download_pdf' order.pk %}" target="_blank">
+                        <button class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button">
+                            <svg class="svg-inline--fa fa-arrow-down fa-w-14 me-1" aria-hidden="true" focusable="false"
+                                 data-prefix="fas" data-icon="arrow-down" role="img" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 448 512" data-fa-i2svg="">
+                                <path fill="currentColor"
+                                      d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"></path>
+                            </svg>
+                            Download (.pdf)
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="card mb-3">
         <div class="card-body">
             <div class="table-responsive fs--1">

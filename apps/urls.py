@@ -3,7 +3,8 @@ from django.urls import path
 from .views import ProductListView, ProductDetailTemplateView, RegisterCreateView, \
     SettingsUpdateView, FavouriteView, CartListView, CartItemDeleteView, AddToCartView, CustomLogoutView, \
     CheckoutListView, \
-    AddressCreateView, AddressUpdateView, OrderCreateView, OrderListView, OrderDetailView, OrderDeleteView
+    AddressCreateView, AddressUpdateView, OrderCreateView, OrderListView, OrderDetailView, OrderDeleteView, \
+    OrderPdfCreateView
 
 urlpatterns = [
     # path('rv/', ProductLIstTemplateView.as_view(), name='product_list'),
@@ -33,5 +34,7 @@ urlpatterns = [
     path('orders', OrderListView.as_view(), name='orders_list'),
     path('order-create/', OrderCreateView.as_view(), name='order_create'),
     path('order/<int:pk>', OrderDetailView.as_view(), name='order'),
-    path('order/delete/<int:pk>', OrderDeleteView.as_view(), name='order_delete')
+    path('order/delete/<int:pk>', OrderDeleteView.as_view(), name='order_delete'),
+    path('download-pdf/<int:pk>', OrderPdfCreateView.as_view(), name='download_pdf')
+
 ]

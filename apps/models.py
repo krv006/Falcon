@@ -4,11 +4,12 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Model, JSONField, TextChoices, DateField, CharField, CASCADE, \
     PositiveIntegerField, ForeignKey, DateTimeField, TextField, EmailField, SlugField, ManyToManyField, DecimalField, \
-    ImageField, IntegerField, BooleanField
+    ImageField, IntegerField, BooleanField, Sum, F, FileField
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
+from decimal import Decimal
 
 
 # class CreatedBaseModel(Model):
@@ -156,18 +157,30 @@ class Order(Model):
     address = ForeignKey('apps.Address', CASCADE)
     owner = ForeignKey('apps.User', CASCADE, related_name='orders')
     created_at = DateTimeField(auto_now_add=True)
+    pdf_file = FileField(upload_to='order/pdf/', null=True, blank=True)
+
 
     def __str__(self):
         return f'Order {self.id} - {self.status}'
 
+    @property
+    def amount(self):
+        aggregated = self.order_items.aggregate(
+            subtotal=Sum(
+                (F('quantity') * (F('product__price') * (100 - F('product__price_percentage')) / 100)) + F(
+                    'product__shopping_cost')
+            )
+        )
 
-class Address(Model):
-    user = ForeignKey('apps.User', CASCADE)
-    full_name = CharField(max_length=255)
-    street = CharField(max_length=255)
-    zip_code = PositiveIntegerField()
-    city = CharField(max_length=255)
-    phone = CharField(max_length=255)
+        subtotal = aggregated['subtotal'] or Decimal('0')
+        tax = subtotal * Decimal('0.05')
+        total = subtotal + tax
+
+        return {
+            'subtotal': subtotal,
+            'tax': tax,
+            'total': total
+        }
 
 
 class OrderItem(Model):
@@ -178,6 +191,15 @@ class OrderItem(Model):
     @property
     def sub_amount(self):
         return self.quantity * self.product.new_price
+
+
+class Address(Model):
+    user = ForeignKey('apps.User', CASCADE)
+    full_name = CharField(max_length=255)
+    street = CharField(max_length=255)
+    zip_code = PositiveIntegerField()
+    city = CharField(max_length=255)
+    phone = CharField(max_length=255)
 
 
 class CreditCard(Model):
@@ -197,4 +219,3 @@ class SiteSettings(Model):
 
     # TODO opshiy summadan tax di ovolish kerak nechi foiz bolsa foizda qilib
     # TODO pdf file di order ichiga saqlash kerak boladi pdf_field = order.pdf
-

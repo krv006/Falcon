@@ -2,7 +2,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import F, Sum, Q
 # from django.core.cache import cache
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -11,7 +11,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from apps.forms import UserRegisterModelForm, OrderCreateModelForm
 from apps.models import Product, Category, Favorite, CartItem, Address, Order
 from apps.models import User
-
+from apps.utils import make_pdf
 
 class CategoryMixin:
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -238,3 +238,12 @@ class OrderCreateView(LoginRequiredMixin, CategoryMixin, CreateView):
 
     def form_invalid(self, form):
         return super().form_invalid(form)
+
+
+class OrderPdfCreateView(View):
+    def get(self, request, pk, *args, **kwargs):
+        order = get_object_or_404(Order, pk=pk)
+        if not order.pdf_file:
+            make_pdf(order)
+        # return FileResponse(order.pdf_file.open(), as_attachment=True)
+        return FileResponse(order.pdf_file, as_attachment=True)

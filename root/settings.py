@@ -1,4 +1,5 @@
-import os
+import os.path
+
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -34,7 +35,15 @@ INSTALLED_APPS = [
     'django_celery_beat',
     "debug_toolbar",
     'mptt',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.telegram',
+
 ]
 
 MIDDLEWARE = [

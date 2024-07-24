@@ -35,6 +35,9 @@ urlpatterns = [
     path('order-create/', OrderCreateView.as_view(), name='order_create'),
     path('order/<int:pk>', OrderDetailView.as_view(), name='order'),
     path('order/delete/<int:pk>', OrderDeleteView.as_view(), name='order_delete'),
-    path('download-pdf/<int:pk>', OrderPdfCreateView.as_view(), name='download_pdf')
+    path('download-pdf/<int:pk>', OrderPdfCreateView.as_view(), name='download_pdf'),
+
+
+
 
 ]

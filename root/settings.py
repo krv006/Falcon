@@ -46,6 +46,8 @@ INSTALLED_APPS = [
 
 ]
 
+SITE_ID = 1
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'root.urls'
@@ -73,6 +76,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 WSGI_APPLICATION = 'root.wsgi.application'
@@ -247,7 +255,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 LOGIN_URL = 'login_page'
 LOGOUT_REDIRECT_URL = 'login_page'
-LOGIN_REDIRECT_URL = 'product_list_page'
+# LOGIN_REDIRECT_URL = 'product_list_page'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -297,5 +305,37 @@ INTERNAL_IPS = [
     "localhost"
     # ...
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email'
+        ]
+    },
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
+        'SCOPE': ['email', 'public_profile'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'first_name',
+            'last_name',
+            'name',
+            'picture',
+            'short_name',
+            'email'
+        ],
+        'VERSION': 'v20.0',
+        'GRAPH_API_URL': 'https://graph.facebook.com/v20.0',
+    },
+    'telegram': {
+    }
+}
+
+LOGIN_REDIRECT_URL = '/'
+# BUNDAN 2 TA BOR
 
 # DOCKER 36D start

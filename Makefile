@@ -19,3 +19,6 @@ dumpdata:
 
 loaddata:
 	python3 manage.py loaddata categories
+
+ngrok:
+	ngrok http 8000

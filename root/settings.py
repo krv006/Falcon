@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'mptt',
     'django.contrib.humanize',
-
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -57,7 +56,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
+    'allauth.account.middleware.AccountMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://ffaf-178-218-201-17.ngrok-free.app'
 ]
 
 ROOT_URLCONF = 'root.urls'
@@ -336,6 +341,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/'
+
 # BUNDAN 2 TA BOR
 
 # DOCKER 36D start

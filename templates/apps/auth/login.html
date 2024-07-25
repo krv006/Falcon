@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load socialaccount %}
+{% load static %}
 
 {% block main_content %}
     <div class="row flex-center min-vh-100 py-6">
@@ -26,11 +27,11 @@
                         <div class="mb-3">
                             <input class="form-control" type="text" placeholder="Username" name="username"/>
                         </div>
-                    
+
                         <div class="mb-3">
                             <input class="form-control" type="password" placeholder="Password" name="password"/>
                         </div>
-                    
+
                         <div class="row flex-between-center">
                             <div class="col-auto">
                                 <div class="form-check mb-0">
@@ -56,10 +57,24 @@
                         <div class="divider-content-center">or log in with</div>
                     </div>
                     <div class="row g-2 mt-2">
-                        <div class="col-sm-6"><a class="btn btn-outline-google-plus btn-sm d-block w-100" href="#"><span
-                                class="fab fa-google-plus-g me-2" data-fa-transform="grow-8"></span> google</a></div>
-                        <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#"><span
-                                class="fab fa-facebook-square me-2" data-fa-transform="grow-8"></span> facebook</a>
+                        <div class="col-sm-6">
+                            <a class="btn btn-outline-google-plus btn-sm d-block w-100"
+                               href="{% provider_login_url 'google' %}">
+                                <span class="fab fa-google-plus-g me-2" data-fa-transform="grow-8"></span>
+                                google
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
+                                <span class="fab fa-facebook-square me-2" data-fa-transform="grow-8"></span>
+                                facebook
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a class="btn btn-outline-facebook btn-sm d-block w-100" href="#">
+                                <span class="fab fa-telegram me-2" data-fa-transform="grow-8"></span>
+                                telegram
+                            </a>
                         </div>
                     </div>
                 </div>

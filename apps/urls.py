@@ -38,6 +38,4 @@ urlpatterns = [
     path('download-pdf/<int:pk>', OrderPdfCreateView.as_view(), name='download_pdf'),
 
 
-
-
 ]

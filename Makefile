@@ -9,7 +9,7 @@ email:
 	python3 manage.py sendtestemail
 
 celery:
-	celery -A core worker -l INFO
+	celery -A root worker -l INFO
 
 beat:
 	celery -A root beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler

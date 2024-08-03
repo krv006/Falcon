@@ -13,6 +13,7 @@ from apps.models import Product, Category, Favorite, CartItem, Address, Order
 from apps.models import User
 from apps.utils import make_pdf
 
+
 class CategoryMixin:
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)

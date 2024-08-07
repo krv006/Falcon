@@ -118,3 +118,19 @@ TODO
 get database dan bittasini olib beradi va kop malumot bolsa eror chiqazadi
 
 filter esa xammasini olib keb beradi
+
+
+docker run -e POSTGRES_PASSWORD=1 -v new_pg_data:/var/lib/postgresql/data -p 5439:5432
+
+docker exec -itu postgres container_name/container_id psql
+
+
+
+gcc, c++, c+, c -> bular devops uchun kerak boladi xar doim
+
+3 serverga qoyish 3 hil usulda
+
+1 simple (servislar yozib nginx ga oxshab)
+2 docker compose (docker bn run qilish)
+3 k8s (bitta server da ishlamidi 2 ta 3 ta serverda ishlidi va bitta komputer
+                                      oniga boshqa kompyuterlar qoshiladi kotara olishi uchun server qotmasligi uchun)

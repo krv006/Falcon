@@ -1,0 +1,28 @@
+services:
+  django_servie:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: python3 manage.py runserver 0:8033
+    ports:
+      - 8000:8033
+    volumes:
+      - static_volume_p22:/app/static
+      - media_volume_p22:/app/media
+    env_file: .env
+    depends_on:
+      - postgres_service
+
+  postgres_service:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=1
+    ports:
+      - 5432:5432
+    volumes:
+      - new_pg_data:/var/lib/postgresql/data
+
+volumes:
+  new_pg_data:
+  static_volume_p22:
+  media_volume_p22:

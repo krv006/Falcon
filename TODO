@@ -120,9 +120,25 @@ get database dan bittasini olib beradi va kop malumot bolsa eror chiqazadi
 filter esa xammasini olib keb beradi
 
 
+
+TODO
+
+DOCKER, DOCKER-COMPOSE va SERVERLAR BN ISHLASH SHULAR ORQALI
+
 docker run -e POSTGRES_PASSWORD=1 -v new_pg_data:/var/lib/postgresql/data -p 5439:5432
+docker compose up --build -> yangi kutubxonalardi yuklab olish uchun kerak boladi
+
+docker compose up -d
+
+docker compose  exec -itu postgres postgres_serrvice psql -c "create database ..."
 
 docker exec -itu postgres container_name/container_id psql
+docker cp bn copy qilib olsak boladi
+
+loglarini korib qaysi biri yaxshi yomon yokida ishlamayotganini korib olsak boladi
+
+wal degan narsa bor va uni qilib beradigan ishi real vaqtda 5 ta database bir biri bn malumot almashidami shuni korib
+chiqish. Shulardi xammasini REPLICATION deyiladi, bir serverdan 2 chi serverga otqizish REPLICATION xam deyiladi
 
 
 
@@ -134,3 +150,8 @@ gcc, c++, c+, c -> bular devops uchun kerak boladi xar doim
 2 docker compose (docker bn run qilish)
 3 k8s (bitta server da ishlamidi 2 ta 3 ta serverda ishlidi va bitta komputer
                                       oniga boshqa kompyuterlar qoshiladi kotara olishi uchun server qotmasligi uchun)
+
+
+docker start b832ff49aabf
+docker start d957ca58d02c
+docker start 36d8da92ad55

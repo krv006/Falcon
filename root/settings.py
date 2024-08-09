@@ -1,8 +1,9 @@
 import os.path
 
 from pathlib import Path
-from dotenv import load_dotenv
 
+# from dotenv import load_dotenv
+# load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -342,5 +343,4 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_REDIRECT_URL = '/'
 
 # BUNDAN 2 TA BOR
-
 # DOCKER 36D start

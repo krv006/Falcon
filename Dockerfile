@@ -9,6 +9,6 @@ RUN --mount=type=cache,id=custom-pip,target=/root/.cache/pip pip install -r requ
 
 #RUN chmod +x entrypoint
 
-#CMD ["./entrypoint"]
+CMD ["./entrypoint"]
 
-CMD ["python3", "manage.py", "runserver", "0:8000"]
+#CMD ["python3", "manage.py", "runserver", "0:8000"]

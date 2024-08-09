@@ -1,15 +1,15 @@
 from datetime import timedelta
+from decimal import Decimal
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Model, JSONField, TextChoices, DateField, CharField, CASCADE, \
     PositiveIntegerField, ForeignKey, DateTimeField, TextField, EmailField, SlugField, ManyToManyField, DecimalField, \
-    ImageField, IntegerField, BooleanField, Sum, F, FileField
+    ImageField, BooleanField, Sum, F, FileField
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
-from decimal import Decimal
 
 
 # class CreatedBaseModel(Model):

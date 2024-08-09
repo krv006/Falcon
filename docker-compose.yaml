@@ -5,7 +5,7 @@ services:
       dockerfile: ./Dockerfile
     command: python3 manage.py runserver 0:8033
     ports:
-      - 8000:8033
+      - 8001:8033
     volumes:
       - static_volume_p22:/app/static
       - media_volume_p22:/app/media
@@ -14,11 +14,11 @@ services:
       - postgres_service
 
   postgres_service:
-    image: postgres
+    image: postgres:alpine
     environment:
       - POSTGRES_PASSWORD=1
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
       - new_pg_data:/var/lib/postgresql/data
 

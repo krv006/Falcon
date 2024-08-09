@@ -11,6 +11,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from apps.forms import UserRegisterModelForm, OrderCreateModelForm
 from apps.models import Product, Category, Favorite, CartItem, Address, Order
 from apps.models import User
+from apps.tasks import send_to_email
 from apps.utils import make_pdf
 
 
@@ -59,7 +60,7 @@ class RegisterCreateView(CreateView):
     success_url = reverse_lazy('product_list_page')
 
     def form_valid(self, form):
-        # send_to_email.delay('Your account has been created!', form.data['email'])
+        send_to_email.delay('Your account has been created!', form.data['email'])
         form.save()
         return super().form_valid(form)
 

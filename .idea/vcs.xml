@@ -3,18 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Falcon" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../Mahorat_managment" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../Mahorat_web" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../MyFirstDjangoProject" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../factorbot" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../git" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../imthon" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../mahorat" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../mahorat_bots" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../mahoratweb_bot" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../org" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../simple_shop" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../task6" vcs="Git" />
   </component>
 </project>

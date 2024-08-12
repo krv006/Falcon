@@ -157,6 +157,10 @@ docker start d957ca58d02c
 docker start 36d8da92ad55
 
 
+image di oldin udalit qilib kein boshqatan qilish kerak ekan
+docker images -> delete image kn
+undan kein esa built boshqatan
+
 waplayzer -> qilib beradgan ishi nima -> qaysi saytda qanday texnologiya ishlatilgan shulardi korib beradi va yordam
 beradi
 

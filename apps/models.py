@@ -1,17 +1,37 @@
-from django.db import models
-from django.db.models import Model, JSONField
+from datetime import timedelta
+from decimal import Decimal
+
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
+from django.db.models import Model, JSONField, TextChoices, DateField, CharField, CASCADE, \
+    PositiveIntegerField, ForeignKey, DateTimeField, TextField, EmailField, SlugField, ManyToManyField, DecimalField, \
+    ImageField, BooleanField, Sum, F, FileField
 from django.utils.text import slugify
+from django.utils.timezone import now
 from django_ckeditor_5.fields import CKEditor5Field
 from mptt.models import MPTTModel, TreeForeignKey
-from django.utils.timezone import now
 
-from datetime import timedelta
+
+# class CreatedBaseModel(Model):
+#     updated_at = DateTimeField(auto_now=True)
+#     created_at = DateTimeField(auto_now_add=True)
+#
+#     class Meta:
+#         abstract = True
+
+
+class User(AbstractUser):
+    has_premium = BooleanField(default=False)
+
+    @property
+    def cart_count(self):
+        return self.cart_items.count()
 
 
 class Category(MPTTModel):
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(max_length=255, unique=True, editable=False)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    name = CharField(max_length=255, unique=True)
+    slug = SlugField(max_length=255, unique=True, editable=False)
+    parent = TreeForeignKey('self', on_delete=CASCADE, null=True, blank=True, related_name='children')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.slug:
@@ -32,18 +52,19 @@ class Category(MPTTModel):
 
 
 class Product(Model):
-    title = models.CharField(max_length=355)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
-    price_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    shopping_cost = models.DecimalField(max_digits=7, decimal_places=2)
-    quantity = models.PositiveIntegerField()
+    title = CharField(max_length=355)
+    price = DecimalField(max_digits=7, decimal_places=2)
+    price_percentage = DecimalField(max_digits=5, decimal_places=2, default=0)
+    shopping_cost = DecimalField(default=0, max_digits=7, decimal_places=2)
+    quantity = PositiveIntegerField(default=0)
     description = JSONField()
     short_description = CKEditor5Field()
     long_description = CKEditor5Field()
-    category = models.ForeignKey('apps.Category', models.CASCADE)
-    tags = models.ManyToManyField('apps.Tag', related_name='tag')
-    updated_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    category = ForeignKey('apps.Category', CASCADE)
+    tags = ManyToManyField('apps.Tag', related_name='tag')
+    updated_at = DateTimeField(auto_now_add=True)
+    created_at = DateTimeField(auto_now_add=True)
+    is_premium = BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -56,23 +77,144 @@ class Product(Model):
     def is_new(self) -> bool:
         return self.created_at >= now() - timedelta(days=7)
 
+    @property
+    def sub_amount(self):
+        return self.price * self.quantity
+
 
 class ImageProduct(Model):
-    image = models.ImageField(upload_to='products/%Y/%m/%d/')
-    product = models.ForeignKey('apps.Product', models.CASCADE, related_name='images')
+    image = ImageField(upload_to='products/%Y/%m/%d/')
+    product = ForeignKey('apps.Product', CASCADE, related_name='images')
 
 
-class Tag(models.Model):
-    tag_name = models.CharField(max_length=255)
+class Tag(Model):
+    name = CharField(max_length=255)
+    slug = SlugField(max_length=255, unique=True, editable=False)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            unique = self.slug
+            num = 1
+            while Tag.objects.filter(slug=unique).exists():
+                unique = f'{self.slug}-{num}'
+                num += 1
+            self.slug = unique
+        super().save(force_insert, force_update, using, update_fields)
 
 
 class Review(Model):
-    name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255, null=True, blank=True)
-    description = models.TextField()
-    comment_status = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    product = models.ForeignKey('apps.Product', models.CASCADE, related_name='reviw')
+    name = CharField(max_length=255)
+    email = EmailField(max_length=255, null=True, blank=True)
+    description = TextField()
+    comment_status = TextField()
+    created_at = DateTimeField(auto_now_add=True)
+    product = ForeignKey('apps.Product', CASCADE, related_name='reviw')
 
     def __str__(self):
         return self.name
+
+
+class Favorite(Model):
+    user = ForeignKey(User, CASCADE)
+    product = ForeignKey('apps.Product', CASCADE)
+    created_at = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')
+
+
+class CartItem(Model):
+    product = ForeignKey('apps.Product', CASCADE)
+    user = ForeignKey('apps.User', CASCADE, related_name='cart_items')
+    quantity = PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.title}"
+
+    @property
+    def amount(self):
+        return self.quantity * self.product.new_price
+
+    @property
+    def total(self):
+        return self.amount - self.product.shopping_cost
+
+
+class Order(Model):
+    class StatusMethod(TextChoices):
+        COMPLETED = 'completed', 'Completed'
+        PROCESSING = 'processing', 'Processing'
+        ON_HOLD = 'on hold', 'On Hold'
+        PENDING = 'pending', 'Pending'
+
+    class PaymentMethod(TextChoices):
+        PAYPAL = 'paypal', 'Paypal'
+        CREDIT_CARD = 'credit_card', 'Credit_card'
+
+    status = CharField(max_length=255, choices=StatusMethod)
+    payment_method = CharField(max_length=255, choices=PaymentMethod)
+    address = ForeignKey('apps.Address', CASCADE)
+    owner = ForeignKey('apps.User', CASCADE, related_name='orders')
+    created_at = DateTimeField(auto_now_add=True)
+    pdf_file = FileField(upload_to='order/pdf/', null=True, blank=True)
+
+    def __str__(self):
+        return f'Order {self.id} - {self.status}'
+
+    @property
+    def amount(self):
+        aggregated = self.order_items.aggregate(
+            subtotal=Sum(
+                (F('quantity') * (F('product__price') * (100 - F('product__price_percentage')) / 100)) + F(
+                    'product__shopping_cost')
+            )
+        )
+
+        subtotal = aggregated['subtotal'] or Decimal('0')
+        tax = subtotal * Decimal('0.10')
+        total = subtotal + tax
+
+        return {
+            'subtotal': subtotal,
+            'tax': tax,
+            'total': total
+        }
+
+
+class OrderItem(Model):
+    product = ForeignKey('apps.Product', CASCADE)
+    order = ForeignKey('apps.Order', CASCADE, related_name='order_items')
+    quantity = PositiveIntegerField(default=0)
+
+    @property
+    def sub_amount(self):
+        return self.quantity * self.product.new_price
+
+
+class Address(Model):
+    user = ForeignKey('apps.User', CASCADE)
+    full_name = CharField(max_length=255)
+    street = CharField(max_length=255)
+    zip_code = PositiveIntegerField()
+    city = CharField(max_length=255)
+    phone = CharField(max_length=255)
+
+
+class CreditCard(Model):
+    order = ForeignKey('apps.Order', CASCADE)
+    number = CharField(max_length=255)
+    cvv = CharField(max_length=255)
+    expire_date = DateField()
+    owner = ForeignKey('apps.User', CASCADE)
+
+
+class SiteSettings(Model):
+    tax = PositiveIntegerField()
+
+    # @property
+    # def sub_tax(self):
+    #     return
+
+    # TODO opshiy summadan tax di ovolish kerak nechi foiz bolsa foizda qilib
+    # TODO pdf file di order ichiga saqlash kerak boladi pdf_field = order.pdf

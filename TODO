@@ -1,4 +1,16 @@
 
+HOMEWORK
+
+tax yozish kerak
+
+git readmi qilish
+
+PDF file qilish kerak generate qilish kerak
+
+
+
+
+
 admin
 model fields
 class model meta
@@ -21,6 +33,7 @@ https://ccbv.co.uk/
 
 class based view
 CRUD
+
 
 
 
@@ -66,3 +79,98 @@ login,register,celery,email,updateview,createview, loginview, logoutview
 
 
 10.10.2.174
+
+
+TODO
+1. product-detail category boyicha otish -> Ketdi
+2. registerda loginrequired -> ketdi
+3. product-detail da discount ni -> ketdi
+4. product summasini uzs otkazish va summani 3 talik ajratish -> endi
+
+
+n + 1
+UUID
+
+
+
+TODO
+"debug_toolbar",
+'apps.apps.AppsConfig',
+
+yangi kutubxonalar
+
+
+TODO
+cache boladgan narsalardi saqlab olish kk
+magazinga qilinadgan planlarda shuni xam olib qoyish kerak
+
+TODO
+mptt category qilish kerak togirlab
+
+
+TODO
+CUSTOMER da super user yokida ishchi uchun korinishi kerak faqat
+
+ctrl shift 6 bn qilinsa
+
+TODO
+
+get database dan bittasini olib beradi va kop malumot bolsa eror chiqazadi
+
+filter esa xammasini olib keb beradi
+
+
+
+TODO
+
+DOCKER, DOCKER-COMPOSE va SERVERLAR BN ISHLASH SHULAR ORQALI
+
+docker run -e POSTGRES_PASSWORD=1 -v new_pg_data:/var/lib/postgresql/data -p 5439:5432
+docker compose up --build -> yangi kutubxonalardi yuklab olish uchun kerak boladi
+
+docker compose up -d
+
+docker compose  exec -itu postgres postgres_serrvice psql -c "create database ..."
+
+docker exec -itu postgres container_name/container_id psql
+docker cp bn copy qilib olsak boladi
+
+loglarini korib qaysi biri yaxshi yomon yokida ishlamayotganini korib olsak boladi
+
+wal degan narsa bor va uni qilib beradigan ishi real vaqtda 5 ta database bir biri bn malumot almashidami shuni korib
+chiqish. Shulardi xammasini REPLICATION deyiladi, bir serverdan 2 chi serverga otqizish REPLICATION xam deyiladi
+
+
+
+gcc, c++, c+, c -> bular devops uchun kerak boladi xar doim
+
+3 serverga qoyish 3 hil usulda
+
+1 simple (servislar yozib nginx ga oxshab)
+2 docker compose (docker bn run qilish)
+3 k8s (bitta server da ishlamidi 2 ta 3 ta serverda ishlidi va bitta komputer
+                                      oniga boshqa kompyuterlar qoshiladi kotara olishi uchun server qotmasligi uchun)
+
+
+docker start b832ff49aabf
+docker start d957ca58d02c
+docker start 36d8da92ad55
+
+
+image di oldin udalit qilib kein boshqatan qilish kerak ekan
+docker images -> delete image kn
+undan kein esa built boshqatan
+
+waplayzer -> qilib beradgan ishi nima -> qaysi saytda qanday texnologiya ishlatilgan shulardi korib beradi va yordam
+beradi
+
+crm ->  vazifasi bu kelayotgan mijozlardi hammasini mujozga aylantirish hisoblanadi
+
+amo crm -> korib chiqish kerak boladi buni xam
+
+
+
+docker compose down -> container di toxtatib un ochirib tashlash uchun qilinadi
+
+photo secret channel in telegram forward to my channel or archive
+

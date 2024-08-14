@@ -1,4 +1,7 @@
-{% extends 'apps/main_base.html' %}
+{% extends 'apps/base.html' %}
+
+{% load custom_tags %}
+
 {% load static %}
 
 {% block content %}
@@ -11,10 +14,13 @@
                              data-swiper='{"autoHeight":true,"spaceBetween":5,"loop":true,"loopedSlides":5,"thumb":{"spaceBetween":5,"slidesPerView":5,"loop":true,"freeMode":true,"grabCursor":true,"loopedSlides":5,"centeredSlides":true,"slideToClickedSlide":true,"watchSlidesVisibility":true,"watchSlidesProgress":true,"parent":"#galleryTop"},"slideToClickedSlide":true}'>
                             <div class="swiper-wrapper h-100">
                                 {% for p_image in product.images.all %}
-                                    <div class="swiper-slide h-100"><a class="d-block h-sm-100"
-                                                                       href="{% url 'product_detail' product.pk %}"><img
-                                            class="rounded-1 h-100 w-100 fit-cover"
-                                            src="{{ p_image.image.url }}" alt=""/></a>
+                                    <div class="swiper-slide h-100">
+                                        <a class="d-block h-sm-100"
+                                           href="{% url 'product_detail' product.pk %}">
+                                            <img
+                                                    class="rounded-1 h-100 w-100 fit-cover"
+                                                    src="{{ p_image.image.url }}" alt=""/>
+                                        </a>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -26,8 +32,12 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <h5>{{ product.title }}</h5><a class="fs--1 mb-2 d-block" href="#!">{{ product.category.name }}</a>
-                    <div class="fs--2 mb-3 d-inline-block text-decoration-none"><span
+                    <h5>{{ product.title }}</h5>
+                    <a class="fs--1 mb-2 d-block"
+                       href="{% url 'product_list_page' %}?category={{ product.category.slug }}">{{ product.category }}>
+                        {{ product.category.name }}
+                    </a>
+                    <div class=" fs--2 mb-3 d-inline-block text-decoration-none"><span
                             class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span
                             class="fa fa-star text-warning"></span><span class="fa fa-star text-warning"></span><span
                             class="fa fa-star-half-alt text-warning star-icon"></span><span
@@ -39,8 +49,11 @@
                     <h4 class="d-flex align-items-center"><span
                             class="text-warning me-2">${{ product.new_price }}</span><span
                             class="me-1 fs--1 text-500">
-                      <del class="me-1">${{ product.price }}</del><strong>-{{ product.price_percentage }}%</strong></span>
-                    </h4>
+                    {% if product.price != product.new_price %}
+                        <del class="me-1">${{ product.price }}</del><strong>-{{ product.price_percentage }}%</strong>
+                        </span>
+                        </h4>
+                    {% endif %}
                     <p class="fs--1 mb-1"><span>Shipping Cost: </span><strong>${{ product.shopping_cost }}</strong></p>
                     {% if product.quantity == 0 %}
                         <p class="fs--1 mb-1">Stock: <strong
@@ -53,7 +66,7 @@
 
                     <p class="fs--1 mb-3">Tags:
                         {% for tag in product.tags.all %}
-                            <a class="ms-1" href="#!">{{ tag.tag_name }}</a>
+                            <a class="ms-1" href="{% url 'product_list_page' %}?tag={{ tag.slug }}">{{ tag.name }},</a>
                         {% endfor %}
 
                     </p>
@@ -71,13 +84,20 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-auto px-2 px-md-3"><a class="btn btn-sm btn-primary" href="#!"><span
-                                class="fas fa-cart-plus me-sm-2"></span><span class="d-none d-sm-inline-block">Add To Cart</span></a>
+                        <div class="col-auto px-2 px-md-3"><a class="btn btn-sm btn-primary"
+                                                              href="{% url 'add_cart_page' product.pk %}"><span
+                                class="fas fa-cart-plus me-sm-2"></span><span
+                                class="d-none d-sm-inline-block">Add To Cart</span></a>
                         </div>
-                        <div class="col-auto px-0"><a class="btn btn-sm btn-outline-danger border-300" href="#!"
-                                                      data-bs-toggle="tooltip" data-bs-placement="top"
-                                                      title="Add to Wish List"><span
-                                class="far fa-heart me-1"></span>282</a></div>
+                        <div class="col-auto px-0">
+                            <a class="btn btn-sm btn{% if not user|is_liked:product %}-outline{% endif %}-danger border-300"
+                               href="{% url 'add_favorite' product.id %}"
+                               data-bs-toggle="tooltip" data-bs-placement="top"
+                               title="Add to Wish List">
+                                <span class="far fa-heart me-1"></span>
+                                {{ product.favorite_set.count }}
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,7 +111,8 @@
                             </li>
                             <li class="nav-item"><a class="nav-link px-2 px-md-3" id="specifications-tab"
                                                     data-bs-toggle="tab" href="#tab-specifications" role="tab"
-                                                    aria-controls="tab-specifications" aria-selected="false">Specifications</a>
+                                                    aria-controls="tab-specifications"
+                                                    aria-selected="false">Specifications</a>
                             </li>
                             <li class="nav-item"><a class="nav-link px-2 px-md-3" id="reviews-tab"
                                                     data-bs-toggle="tab" href="#tab-reviews" role="tab"

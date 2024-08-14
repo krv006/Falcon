@@ -1,0 +1,29 @@
+{% extends 'apps/base.html' %}
+
+{% block content %}
+    <form method="post" action="{% url 'create_address' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" name="city" required>
+        </div>
+        <div class="form-group">
+            <label for="street">Street</label>
+            <input type="text" class="form-control" id="street" name="street" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" class="form-control" id="full_name" name="full_name" required>
+        </div>
+        <div class="form-group">
+            <label for="zip_code">Zip Code</label>
+            <input type="text" class="form-control" id="zip_code" name="zip_code" required>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Save Address</button>
+    </form>
+{% endblock %}

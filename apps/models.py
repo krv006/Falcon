@@ -191,7 +191,6 @@ class OrderItem(Model):
     def sub_amount(self):
         return self.quantity * self.product.new_price
 
-
 class Address(Model):
     user = ForeignKey('apps.User', CASCADE)
     full_name = CharField(max_length=255)

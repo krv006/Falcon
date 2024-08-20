@@ -94,23 +94,23 @@ WSGI_APPLICATION = 'root.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": os.getenv('DB_NAME'),
-#         "USER": os.getenv('DB_USER'),
-#         "PASSWORD": os.getenv('DB_PASSWORD'),
-#         "HOST": os.getenv('DB_HOST'),
-#         "PORT": os.getenv('DB_PORT')
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv('DB_NAME'),
+        "USER": os.getenv('DB_USER'),
+        "PASSWORD": os.getenv('DB_PASSWORD'),
+        "HOST": os.getenv('DB_HOST'),
+        "PORT": os.getenv('DB_PORT')
+    }
+}
 
 AUTH_USER_MODEL = 'apps.User'
 
@@ -258,8 +258,8 @@ CELERY_TIMEZONE = "Asia/Tashkent"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
-LOGIN_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = 'login_page'
+LOGOUT_REDIRECT_URL = 'login_page'
 # LOGIN_REDIRECT_URL = 'product_list_page'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

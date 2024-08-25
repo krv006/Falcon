@@ -37,6 +37,7 @@ class ProductListView(CategoryMixin, ListView):
 
         category_slug = self.request.GET.get('category')
         if category_slug:
+
             qs = qs.filter(category__slug=category_slug)
         if tags_slug := self.request.GET.get('tag'):
             qs = qs.filter(tags__slug=tags_slug)

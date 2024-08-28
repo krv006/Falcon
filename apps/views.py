@@ -251,3 +251,4 @@ class OrderPdfCreateView(View):
         # return FileResponse(order.pdf_file.open(), as_attachment=True)
         return FileResponse(order.pdf_file, as_attachment=True)
 
+

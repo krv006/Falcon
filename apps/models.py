@@ -38,7 +38,7 @@ class Category(MPTTModel):
             self.slug = slugify(self.name)
             unique = self.slug
             num = 1
-            while Category.objects.filter(slug=unique).exists():
+            while Category.objects.filter(slug=unique).exists(): # todo Category orniga self qilib qoysak ozini olib ketadi
                 unique = f'{self.slug}-{num}'
                 num += 1
             self.slug = unique

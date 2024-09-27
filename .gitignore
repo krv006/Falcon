@@ -3,5 +3,3 @@
 .env
 db.sqlite3
 TODO
-/templates/apps/address/
-/templates/apps/auth/

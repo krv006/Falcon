@@ -94,23 +94,23 @@ WSGI_APPLICATION = 'root.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv('DB_NAME'),
-        "USER": os.getenv('DB_USER'),
-        "PASSWORD": os.getenv('DB_PASSWORD'),
-        "HOST": os.getenv('DB_HOST'),
-        "PORT": os.getenv('DB_PORT')
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": os.getenv('DB_NAME'),
+#         "USER": os.getenv('DB_USER'),
+#         "PASSWORD": os.getenv('DB_PASSWORD'),
+#         "HOST": os.getenv('DB_HOST'),
+#         "PORT": os.getenv('DB_PORT')
+#     }
+# }
 
 AUTH_USER_MODEL = 'apps.User'
 
@@ -344,7 +344,6 @@ LOGIN_REDIRECT_URL = '/'
 
 # BUNDAN 2 TA BOR
 # DOCKER 36D start
-
 
 
 # DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"

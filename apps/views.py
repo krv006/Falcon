@@ -37,7 +37,6 @@ class ProductListView(CategoryMixin, ListView):
 
         category_slug = self.request.GET.get('category')
         if category_slug:
-
             qs = qs.filter(category__slug=category_slug)
         if tags_slug := self.request.GET.get('tag'):
             qs = qs.filter(tags__slug=tags_slug)
@@ -250,5 +249,3 @@ class OrderPdfCreateView(View):
             make_pdf(order)
         # return FileResponse(order.pdf_file.open(), as_attachment=True)
         return FileResponse(order.pdf_file, as_attachment=True)
-
-

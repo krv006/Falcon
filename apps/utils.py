@@ -9,8 +9,12 @@ from root.settings import MEDIA_ROOT
 
 
 def make_pdf(order: Order):
-    data = order.order_items.values_list('product__title', 'quantity', 'product__price_percentage', 'product__price',
-                                         'product__shopping_cost')
+    data = order.order_items.values_list(
+        'product__title',
+        'quantity',
+        'product__price_percentage',
+        'product__price',
+        'product__shopping_cost')
 
     # Create a canvas object
     pdf_file_folder = 'order/pdf'
